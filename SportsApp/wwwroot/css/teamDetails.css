@@ -1,0 +1,160 @@
+﻿#teamContainer {
+    padding: 100px 0;
+}
+
+#teamContainer h3{    
+    color: white !important;
+    font-weight:700;
+    text-align:center;
+    padding-bottom:50px;
+}
+
+.teamManage {
+    margin: 0 50px 50px 50px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white !important;
+    padding: 50px;
+    border-radius: 30px;
+    box-shadow: 0 0 5px 2px #000;
+}
+
+#teamInfo p {
+    color: white !important;
+}
+
+.accessTeam {
+    padding-top:60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+
+.accessTeam p {
+    color: white !important;
+    text-align: center;
+    font-size: 17px !important;
+    font-weight: 500
+}
+
+.accessTeam button {
+    text-align:center;
+    height:36px;
+    width: fit-content;
+    color: #eeeeee;
+    background-color: #f5bc22;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    border: #f5bc22 solid 2px;
+}
+
+.accessTeam button:hover {
+    color: #f5bc22;
+    background-color: transparent;
+}
+
+.btn-delete-team:hover {
+    background-color: transparent;
+    color: red !important;
+}
+
+.btn-delete-team {
+    font-weight: 600;
+    font-size: 15px !important;
+    background-color: red;
+    color: white !important;
+    border: red solid 2px;
+    margin-right: 30px;
+    margin-left: 70px;
+    height: 36px;
+}
+
+.btn-edit-team:hover {
+    background-color: transparent;
+    color: green !important;
+}
+
+.btn-edit-team {
+    font-weight: 600;
+    font-size: 15px !important;
+    background-color: green;
+    color: white !important;
+    border: green solid 2px;
+    border-radius: 5px;
+    height: 36px;
+}
+
+.btn-join-team {
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    background-color: green;
+    color: white !important;
+    border: green solid 2px;
+    height: 36px;
+    margin:0 auto!important;
+}
+
+.btn-join-team:hover {
+    background-color: transparent;
+    color: green !important;
+}
+
+.btn-invite-team {
+    margin-top: 20px !important;
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    background-color: #2e2eff;
+    color: white !important;
+    border: #2e2eff solid 2px;
+}
+
+.btn-invite-team:hover {
+    background-color: transparent;
+    color: #2e2eff !important;
+}
+
+#requestsPlayers {
+    padding: 100px 0;
+}
+
+#requestsPlayers h3{
+    font-weight: 600;
+    padding-bottom: 50px;
+}
+
+#inviteDiv{
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items:center;
+}
+
+#inviteDiv input{
+    width: 300px;
+}
+
+#inviteDiv button{
+    width: fit-content; 
+    height: 36px;
+}
+
+#leaveJoinButtons{
+    margin: 0 auto!important;
+}
+
+.edit-header {
+    background-color: #ffc107;
+}
+
+.btn-submit-team {
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    background-color: transparent;
+    color: #ffc107 !important;
+    border: #ffc107 solid 2px;
+}
+
+.btn-submit-team:hover {
+    background-color: #ffc107;
+    color: white !important;
+}

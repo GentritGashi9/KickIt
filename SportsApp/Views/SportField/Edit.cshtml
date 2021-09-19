@@ -1,0 +1,158 @@
+﻿@model SportsApp.Views.SportField.SportFieldViewModel;
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Edit";
+    ViewData["Name"] = Model.Name;
+    List<SportFieldPictures> sportFieldPictures = (List<SportFieldPictures>)ViewData["sportFieldPictures"];
+}
+
+<link href="~/css/sportFieldDetails.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-select.css" type="text/css"/>
+
+<div class="sportfieldDetailsContainer">
+    <div class="sportfieldTitleContainer">
+        <h1 class="sportfieldTitle"> Edit : @Model.Name</h1>
+        <div class="divider"></div>
+    </div>
+    <div class="row sportFieldInfoContainer">
+        <div class="col-md-6">
+            <div class="slideshow-container">
+                <!-- Full-width images with number and caption text -->
+                @if (sportFieldPictures == null || sportFieldPictures.Count == 0)
+                {
+                    <div class="mySlides">
+                        <img src="~/img/sportFieldPictures/notFoundPicture.jpg" style="width:100%">
+                    </div>
+                }
+                else
+                {
+                    for (int i = 1; i <= sportFieldPictures.Count; i++)
+                    {
+                        <div class="mySlides">
+                            <div class="numbertext">@i / @sportFieldPictures.Count</div>
+                            <img src="~/img/sportFieldPictures/@sportFieldPictures[i - 1].Path" style="width:100%">
+                            <div class="deleteDiv">
+                                <img src="~/img/delete-icon.jpg" class="delete"
+                                     onclick="deletePicture('@sportFieldPictures[i-1].Id')">
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Next and previous buttons -->
+                    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                }
+            </div>
+            <br>
+            @if (!(sportFieldPictures == null || sportFieldPictures.Count == 0))
+            {
+                <!-- The dots/circles -->
+                <div style="text-align:center">
+
+                    @for (int i = 1; i <= sportFieldPictures.Count; i++)
+                    {
+                        <span class="dot" onclick="currentSlide(@i)"></span>
+                    }
+                </div>
+            }
+        </div>
+        <div class="col-md-6 sportfieldInfo border-0 " style="padding: 20px!important;">
+            <div class="row justify-content-center">
+                <form enctype="multipart/form-data" asp-action="Edit" asp-route-id="@ViewData["Id"]">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-6">
+                            <div class="form-group">
+                                <label asp-for="Name" class="control-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6">
+                            <div class="form-group">
+                                <label asp-for="Address" class="control-label"></label>
+                                <input asp-for="Address" class="form-control" />
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-6">
+                            <div class="form-group">
+                                <label asp-for="ContactNr" class="control-label">Contact Number</label>
+                                <input asp-for="ContactNr" class="form-control" />
+                                <span asp-validation-for="ContactNr" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6">
+                            <div class="form-group">
+                                <label asp-for="Pictures" class="control-label">Add Picture</label>
+                                <div class="custom-file">
+                                    <input asp-for="Pictures" multiple class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                                <span asp-validation-for="Pictures" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-6">
+                            <div class="form-group">
+                                <label asp-for="Categories" class="control-label">Category</label><br>
+                                <select id="categoryList" asp-for="CategoryId"
+                                        asp-items='@(new SelectList(Model.Categories,"Id","Name"))' style="width:100%;"
+                                        class="form-control">
+                                </select>
+                                <span asp-validation-for="Categories" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label id="selp" asp-for="Workingdays" class="control-label">Working Days</label><br>
+                                <select class="selectpicker show-tick" asp-for="Workingdays"
+                                        asp-items="@Html.GetEnumSelectList(typeof(SportsApp.Models.Days))" multiple>
+                                </select>
+                                <span asp-validation-for="Workingdays" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6">
+                            <label class="control-label">Working Hours : </label> <br>
+                            <div class="row">
+                                <span asp-validation-for="StartTime" class="text-danger"></span>
+                                <label asp-for="StartTime" class="control-label"
+                                       style="width: 50%;height:50%;margin:auto;"> </label>
+                                <input asp-for="StartTime" type="time" class="form-control" required step="3600"
+                                       style="width: 50%;height:50%;" />
+                            </div>
+                            <div class="row">
+                                <span asp-validation-for="EndTime" class="text-danger"></span>
+                                <label asp-for="EndTime" class="control-label"
+                                       style="width: 50%;height:50%;margin:auto;"> </label>
+                                <input asp-for="EndTime" type="time" class="form-control" required step="3600"
+                                       style="width: 50%;height:50%;" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-end" style="margin-top:30px">
+                        <input type="submit" value="Submit" class="EditButton" />
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.custom-file-input').on("change", function () {
+                var fileLabel = $(this).next('.custom-file-label');
+                var files = $(this)[0].files;
+                if (files.length > 1) {
+                    fileLabel.html(files.length + ' files selected');
+                }
+                else if (files.length == 1) {
+                    fileLabel.html(files[0].name);
+                }
+            });
+        });
+    </script>
+    <script src="~/js/sportFieldDetails.js"></script>
+}

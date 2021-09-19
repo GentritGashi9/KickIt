@@ -1,0 +1,43 @@
+﻿#Split {
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    font-size: 48px;
+    transition: 0,5s;
+    color: #ffc107;
+    
+}
+@media (max-width: 1020px){
+    #Split{
+        left: 43%;
+    }
+}
+@media (max-width: 768px) {
+    #Split {
+        left: 40%;
+    }
+}
+.char{
+    animation: waves 5s ease-in-out infinite;
+    transform: translateY(-0.6em);
+    animation-delay: calc(0.05s * var(--char-index));
+}
+@keyframes waves{
+    0%,100%{
+        transform: translateY(-0.6em) rotate(-25deg);
+    }
+    50%{
+        transform: translateY(0.6em) rotate(25deg);
+    }
+}
+@media (max-width: 600px) {
+    #Split {
+        left: 40%;
+    }
+}
+@media (max-width: 520px) {
+    #Split {
+        left: 36%;
+    }
+}
+

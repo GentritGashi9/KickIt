@@ -1,0 +1,31 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="container" style="padding:20px 0px; min-height:600px">
+    <div class="text-center tableAdmin" style="margin-bottom:20px;">
+        <div class="text-center yellowsite" style="padding:10px 0px;">
+            <h4 style="margin-bottom:10px;">Create a new Sport Field:</h4>
+            <a class="btn neonbutton" style="margin-top:20px" asp-controller="SportField" asp-action="Create">Register Sport Field</a>
+        </div>
+        <div class="table-responsive">
+            <table id="DT_loadPendingSportFields" class="table table-bordered" style="width:100%">
+                <thead class="light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>ContactNr</th>
+                        <th>Details</th>
+                        <th>Accept Sport Field</th>
+                        <th>Refuse Sport Field</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+    </div>
+</div>
+@section Scripts{
+    <script src="~/js/ListAllPendingSportFields.js"></script>
+}

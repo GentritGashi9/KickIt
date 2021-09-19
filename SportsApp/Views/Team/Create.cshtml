@@ -1,0 +1,58 @@
+@model SportsApp.ViewModels.TeamViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+<div style="background-image: url('/img/ImagesSite/CreateTeam4.jpg');">
+    <div style="padding: 50px 0px">
+        <div class="col-md-12 mx-auto py-4">
+            <div class="row">
+                <div class="col-lg-3 col-md-2 col-sm-1"></div>
+                <div class="col-lg-6 col-md-8 col-sm-10">
+                    <div class="card" style="background-color:rgba(255, 255, 255, 0.8)!important;">
+                        <div class="card-header primary-btn rounded-3 text-uppercase text-white">
+                            <h5>Create Team </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group" style="text-align:center">
+                                        <label asp-for="Name" class="control-label"></label>
+                                        <input id="teamName" asp-for="Name" class="form-control" />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group" style="text-align:center">
+                                        <label asp-for="City" class="control-label"></label>
+                                        <div style="width:100%">
+                                            <select id="cityList" asp-for="City" class="selectpicker show-tick form-control" data-live-search="true"
+                                                    data-dropup-auto="false" data-size="5" asp-items="@Html.GetEnumSelectList(typeof(SportsApp.Models.Cities))">
+                                                <option value="" disabled selected hidden>Please choose your city...</option>
+                                            </select>
+                                        </div>
+                                        <span asp-validation-for="City" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group" style="text-align:center">
+                                        <label asp-for="Categories" class="control-label">Category</label><br>
+                                        <select id="categoryList" class="selectpicker show-tick form-control" asp-for="CategoryId"
+                                                asp-items='@(new SelectList(Model.Categories,"Id","Name"))'
+                                                style="width:100%;height:fit-content;font-size:20px;">
+                                        </select>
+                                        <span asp-validation-for="Categories" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" style="display:flex;justify-content:center;align-items:center;margin-top:20px">
+                                <button class="btn btn-sm primary-btn rounded-3 text-uppercase" onclick="CreateTeam()">Create Team</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-2 col-sm-1"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/CreateTeam.js"></script>
+}

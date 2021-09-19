@@ -1,0 +1,52 @@
+@model SportsApp.Models.FieldOwner
+
+@{
+    ViewData["Title"] = "Edit";
+    var x = ViewData["ApplicationUserId"];
+}
+
+<div class="container-fluid px-1 py-5 mx-auto">
+    <div class="row d-flex justify-content-center">
+        <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
+            <h3>Edit Field Owner</h3>
+            <div class="card">
+                <form class="form-card" asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-6 flex-column d-flex">
+                            <label asp-for="BuissnessName" class="form-control-label px-3">Business Name<span class="text-danger"> *</span></label> 
+                            <input asp-for="BuissnessName" type="text"><span asp-validation-for="BuissnessName" class="text-danger"></span> 
+                        </div>
+                        <div class="form-group col-sm-6 flex-column d-flex">
+                            <label asp-for="Address" class="form-control-label px-3">Address<span class="text-danger"> *</span></label> 
+                            <input asp-for="Address" type="text">  <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label asp-for="ContactNr" class="form-control-label px-3">Contact Number <span class="text-danger">*</span></label>
+                            <input asp-for="ContactNr" type="text"> <span asp-validation-for="ContactNr" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6 flex-column d-flex">
+                            <label asp-for="ApplicationUserId" class="form-control-label px-3">ApplicationUser<span class="text-danger"> *</span></label>
+                            <input  value="@User.Identity.Name" readonly>
+                            <input asp-for="ApplicationUserId" value="@x" hidden />
+                        </div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="form-group col-sm-6">
+                            <button asp-action="GetFieldOwners" class="btn-block btn-primary"> 
+                            <i class="fas fa-list mr-2"></i>Back to List
+                            </button>
+                        </div>
+                        <div class="form-group col-sm-6"> <button type="submit" value="Save" class="btn-block btn-primary">Save</button> </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

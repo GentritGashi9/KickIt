@@ -1,0 +1,112 @@
+﻿@{
+    var loggedUser = (string)ViewData["Id"];
+}
+
+<div class="container" style="min-height:600px">
+    <div class="text-center tableAdmin">
+        @if (User.Identity.IsAuthenticated && (User.IsInRole("Client") || User.IsInRole("Admin")))
+        {
+
+            <div class="text-center yellowsite">
+                <h4>Register a new Sport Field:</h4>
+                <a class="neonbutton " asp-controller="SportField" asp-action="Create">Register
+                    Sport Field</a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="neonbutton pending" asp-controller="Admin" asp-action="ManageFields">Pending
+                        Sport Field</a>
+                }
+            </div>
+            <div class="sportFieldsTableContainer">
+                <div class="sportFieldsTable"> 
+                    <div class="table-responsive  ">
+                        <table id="DT_loadSport" class="table table-striped table-bordered" style="width:100%">
+                            <thead class="light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th>ContactNr</th>
+                                    <th>Category</th>
+                                    @if (!User.IsInRole("Client"))
+                                    {
+                                        <th>Field Owner</th>
+                                    }
+                                    <th>Details</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                @if (!User.IsInRole("Admin"))
+                {
+                    <hr/>
+                    <div class="sportFieldsTable">
+                        <h4>Your Pending Approval Sport Fields!</h4>
+                        <div class="table-responsive  ">
+                            <table id="DT_loadSportPending" class="table table-striped table-bordered" style="width:100%">
+                                <thead class="light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>ContactNr</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        @* @if (User.Identity.IsAuthenticated && (User.IsInRole("Player") || User.IsInRole("Client")) &&
+            !User.IsInRole("Admin"))
+            {
+            <h4 style="margin-top:30px"><small>Sport Fields List</small></h4>
+
+            <div class="table-responsive">
+            <table id="DT_loadSportNoAction" class="table table-striped table-bordered" style="width:100%">
+            <thead class="light">
+            <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>ContactNr</th>
+            <th>Details</th>
+            </tr>
+            </thead>
+            </table>
+            </div>
+
+            } *@
+    </div>
+</div>
+@section Scripts{
+<script src="~/js/ListAllSportFields.js"></script>
+@if(User.Identity.IsAuthenticated && User.IsInRole("Client")) {
+<script>
+    $(document).ready(function () {
+        var x = "@loggedUser";
+        loadDataTableFieldClient(x);
+        loadDataTableFieldClientWithout(x);
+        loadDataTableFieldClientPending(x);
+    });
+</script>
+}
+else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+<script>
+    $(document).ready(function () {
+        loadDataTableFieldAdmin();
+    });
+</script>
+}
+else if (User.Identity.IsAuthenticated && User.IsInRole("Player"))
+{
+<script>
+    $(document).ready(function () {
+        loadDataTableField();
+    });
+</script>
+}
+}

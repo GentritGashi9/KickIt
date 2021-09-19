@@ -1,0 +1,183 @@
+﻿@{
+    var schedule = (Schedule)ViewData["Schedule"];
+    var sportField = (SportField)ViewData["SportFields"];
+    var team1 = (Team)ViewData["Team1"];
+    var team2 = (Team)ViewData["Team2"];
+    var match = (Matches)ViewData["Match"];
+}
+<section id="srx" style="position:relative">
+    <div class="container-fluid px-1 py-5 mx-auto" style="position:absolute;padding: 0px!important">
+        <div class="row d-flex justify-content-center">
+            <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
+                <div class="card" style="background: rgba(0, 0, 0, 0.4);margin:20px;">
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-12 flex-column d-flex text-center">
+                            <label class="form-control-label px-3 textyellow">Match Name:</label>
+                            <input class="textblack text-center" type="text" value="@team1.Name v.s. @team2.Name" disabled>
+                        </div>
+                        <div class="form-group col-sm-12 flex-column d-flex text-center">
+                            <label class="form-control-label px-3 textyellow">Day</label>
+                            <input class="textblack text-center" type="datetime" value="@schedule.StartTime.ToString("d")" disabled>
+                        </div>
+                        <div class="form-group col-sm-6 flex-column d-flex text-center">
+                            <label class="form-control-label px-3 textyellow">Start Time</label>
+                            <input class="textblack" type="datetime" value="@schedule.StartTime.ToString("t")" disabled>
+                        </div>
+                        <div class="form-group col-sm-6 flex-column d-flex text-center">
+                            <label class="form-control-label px-3 textyellow">End time</label>
+                            <input class="textblack" type="datetime" value="@schedule.EndTime.ToString("t")" disabled>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between text-left">
+
+                        <div class="form-group col-sm-6 flex-column d-flex text-center">
+                            <label class="form-control-label px-3 textyellow">Team Name</label>
+                            <input class="textblack" type="text" value="@team1.Name" disabled>
+                        </div>
+                        <div class="form-group col-sm-6 flex-column d-flex text-center">
+                            <label class="form-control-label px-3 textyellow">Team Name</label>
+                            <input class="textblack" type="text" value="@team2.Name" disabled>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between text-left">
+
+                        <div class="form-group col-sm-6 flex-column d-flex text-center">
+                            <label class="form-control-label px-3 textyellow">Sport Field Name:</label>
+                            <input class="textblack" type="text" value="@sportField.Name" disabled>
+                        </div>
+                        <div class="form-group col-sm-6 flex-column d-inline text-center">
+                            <label class="form-control-label px-3 textyellow">Sport Field Main image:</label>
+                            <img height="70" width="70" style="border-radius:50%" src="/img/sportFieldPictures/@sportField.MainPicture"
+                                 onerror="this.onerror=null;this.src='/img/sportFieldPictures/noImage.png';" />
+                        </div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="form-group col-sm-12">
+                            <div class="d-inline col-sm-6">
+                                <span style="font-weight: 900; color: white;">Accept Match Request</span>
+                                <button type="button" class="btn btn-success" style="border-radius:50% !important" onclick="Accept('/Matches/AcceptForMatchC/@match.Id')">
+                                    <i class="fas fa-calendar-check"></i>
+                                </button>
+                            </div>
+                            <div class="d-inline col-sm-6">
+                                <span style="font-weight: 900; color: white;">Refuse Match Request</span>
+                                <button type="button" class="btn btn-danger" style="border-radius:50% !important" onclick="Refuse('/Matches/RefuseForMatch/@match.Id')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <script src="~/Swal/ListAllPendingTeamsAcceptMatches.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r118/three.js"></script>
+    <script src="~/js/three.min.js"></script>
+    <script src="~/js/postprocessing.min.js"></script>
+    <script>
+        let scene, camera, cloudParticles = [], composer;
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.z = 1;
+            camera.rotation.x = 1.16;
+            camera.rotation.y = -0.12;
+            camera.rotation.z = 0.27;
+
+            let ambient = new THREE.AmbientLight(0x555555);
+            scene.add(ambient);
+
+            let directionalLight = new THREE.DirectionalLight(0xff8c19);
+            directionalLight.position.set(0, 0, 1);
+            scene.add(directionalLight);
+
+            let orangeLight = new THREE.PointLight(0xcc6600, 50, 450, 1.7);
+            orangeLight.position.set(200, 300, 100);
+            scene.add(orangeLight);
+            let redLight = new THREE.PointLight(0xd8547e, 50, 450, 1.7);
+            redLight.position.set(100, 300, 100);
+            scene.add(redLight);
+            let blueLight = new THREE.PointLight(0x3677ac, 50, 450, 1.7);
+            blueLight.position.set(300, 300, 200);
+            scene.add(blueLight);
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            scene.fog = new THREE.FogExp2(0x03544e, 0.001);
+            renderer.setClearColor(scene.fog.color);
+            document.getElementById("srx").appendChild(renderer.domElement);
+
+            let loader = new THREE.TextureLoader();
+            loader.load("/img/Animation/smoke.png", function (texture) {
+                cloudGeo = new THREE.PlaneBufferGeometry(500, 500);
+                cloudMaterial = new THREE.MeshLambertMaterial({
+                    map: texture,
+                    transparent: true
+                });
+
+                for (let p = 0; p < 50; p++) {
+                    let cloud = new THREE.Mesh(cloudGeo, cloudMaterial);
+                    cloud.position.set(
+                        Math.random() * 800 - 400,
+                        500,
+                        Math.random() * 500 - 500
+                    );
+                    cloud.rotation.x = 1.16;
+                    cloud.rotation.y = -0.12;
+                    cloud.rotation.z = Math.random() * 2 * Math.PI;
+                    cloud.material.opacity = 0.55;
+                    cloudParticles.push(cloud);
+                    scene.add(cloud);
+                }
+            });
+            loader.load("/img/Animation/stars.jpg", function (texture) {
+
+                const textureEffect = new POSTPROCESSING.TextureEffect({
+                    blendFunction: POSTPROCESSING.BlendFunction.COLOR_DODGE,
+                    texture: texture
+                });
+                textureEffect.blendMode.opacity.value = 0.2;
+
+                const bloomEffect = new POSTPROCESSING.BloomEffect({
+                    blendFunction: POSTPROCESSING.BlendFunction.COLOR_DODGE,
+                    kernelSize: POSTPROCESSING.KernelSize.SMALL,
+                    useLuminanceFilter: true,
+                    luminanceThreshold: 0.3,
+                    luminanceSmoothing: 0.75
+                });
+                bloomEffect.blendMode.opacity.value = 1.5;
+
+                let effectPass = new POSTPROCESSING.EffectPass(
+                    camera,
+                    bloomEffect,
+                    textureEffect
+                );
+                effectPass.renderToScreen = true;
+
+                composer = new POSTPROCESSING.EffectComposer(renderer);
+                composer.addPass(new POSTPROCESSING.RenderPass(scene, camera));
+                composer.addPass(effectPass);
+
+                window.addEventListener("resize", onWindowResize, false);
+                render();
+            });
+        }
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        function render() {
+            cloudParticles.forEach(p => {
+                p.rotation.z -= 0.001;
+            });
+            composer.render(0.1);
+            requestAnimationFrame(render);
+        }
+        init();
+    </script>
+}

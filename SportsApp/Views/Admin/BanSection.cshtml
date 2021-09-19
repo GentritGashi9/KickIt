@@ -1,0 +1,55 @@
+﻿@using SportsApp.Data
+@{
+    var user = (ApplicationUser)ViewData["UserD"];
+}
+<div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-8 offset-sm-2">
+    <div class="">
+        <div class="card">
+            <div class="row text-center">
+                <div class="col-md-12 text-center">
+                    <img style="border-radius:50%; border: 2px solid " height="200" width="200" class="img-circle" src="~/ProfileImg/@user.ProfileImg" />
+                </div>
+                <div class="col-md-12 text-center">
+                    <div class="main">
+                        <h3 class="text-dark">@user.UserName </h3>
+                        <h4 class="text-primary">@user.Name @user.Surname</h4>
+                        <h5 class="text-dark">"Location: @user.Location / Email: @user.Email "</h5>
+                        <div class="text-center">Current status: </div><strong style="font-size:24px;" class="text-center text-@(user.IsBanned ? "danger" :"success")">" @(user.IsBanned ? "Banned" :"Not Banned") "</strong>
+                    </div>
+                    <div class="footer">
+                        <div class="text-center">
+                            <div class="row text-center" style="margin-top:30px;">
+                                <div class="col-md-12" style="font-size:24px;">Here you can @(user.IsBanned ? "Unban": "Ban") This User:</div>
+                                <div class="col-md-12">
+                                    <a class="btn btn-@(user.IsBanned ? "success": "danger")" style="color: @(user.IsBanned ? "green": "red")" onclick="@(user.IsBanned ?"MUnBan() ":"MBan() ")">
+                                        <i class="fas fa-user-@(user.IsBanned? "check":"slash")"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-12" style="font-size:24px;">Here you can back to all users List:</div>
+                                <div class="col-md-12">
+                                    <a class="btn btn-primary" style="border-radius:50%;" asp-controller="Admin" asp-action="ManageUsers"><i class="fas fa-reply"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{ 
+    <script src="~/Swal/Banning.js"></script>
+    <script>
+
+    function MBan() {
+        var url = "/Admin/BanUser/@user.Id";
+        var un = "@user.UserName";
+        Ban(url,un);
+    }
+    function MUnBan() {
+        var url = "/Admin/UnBanUser/@user.Id";
+        var un = "@user.UserName";
+        UnBan(url,un);
+    }
+    </script>
+}

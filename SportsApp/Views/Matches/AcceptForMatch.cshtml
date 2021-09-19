@@ -1,0 +1,170 @@
+﻿@{
+    var gameRoom = (GameRoom)ViewData["gameRoom"];
+    var Team1Id = (string)ViewData["T1Id"];
+    //@gameRoom.Matches.StartTime @gameRoom.Matches.EndTime
+    var Team2Id = (string)ViewData["T2Id"];
+    var endT = (DateTime)ViewData["EndTime"];
+    var startT = (DateTime)ViewData["StartTime"];
+
+    var Teams = (List<Team>)ViewData["Teams"];
+}
+<section id="srx" style="position:relative">
+    <div class="container-fluid px-1 py-5 mx-auto" style="position:absolute;min-height:100vh">
+        <div class="row d-flex justify-content-center">
+            <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
+                <h3>Your game room has been created!</h3>
+                <div class="card" style="background: rgba(0, 0, 0, 0.4);">
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-12 flex-column d-flex text-center">
+                            <label class="form-control-label px-3 textyellow">Game Room Name:</label>
+                            <input class="textblack text-center" type="text" value="@gameRoom.Name" disabled>
+                        </div>
+                        <div class="form-group col-sm-12 flex-column d-flex text-center">
+                            <label class="form-control-label px-3 textyellow">Day</label>
+                            <input class="textblack text-center" type="datetime" value="@startT.ToString("d")" disabled>
+                        </div>
+                        <div class="form-group col-sm-6 flex-column d-flex text-center">
+                            <label class="form-control-label px-3 textyellow">Start Time</label>
+                            <input class="textblack" type="datetime" value="@startT.ToString("t")" disabled>
+                        </div>
+                        <div class="form-group col-sm-6 flex-column d-flex text-center">
+                            <label class="form-control-label px-3 textyellow">End time</label>
+                            <input class="textblack" type="datetime" value="@endT.ToString("t")" disabled>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between text-left">
+                        @foreach (Team t in Teams)
+                        {
+                            <div class="form-group col-sm-6 flex-column d-flex text-center">
+                                <label class="form-control-label px-3 textyellow">Team Name</label>
+                                <input class="textblack" type="text" value="@t.Name" disabled>
+                            </div>
+                        }
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="form-group col-sm-6"></div>
+                        <h2 class="createRoomSubTitle">All you need to do is create an join your team chatroom!</h2>
+                        <div class="form-group col-sm-6 offset-3">
+                            <input type="text" id="Team1" value="@Team1Id" hidden />
+                            <input type="text" id="Team2" value="@Team2Id" hidden />
+                            <input type="text" id="RoomId" value="@gameRoom.Id" hidden />
+                            <button type="button" id="ChrButton" class="btn-block btn-submit" data-bind="click: createRooms">Create Chat Room</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <script src="~/lib/knockout/knockout-latest.min.js"></script>
+    <script src="~/js/ChatRoom/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/ChatRoom/site.js" asp-append-version="true"></script>
+    <script src="~/js/ChatRoom/chat.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r118/three.js"></script>
+    <script src="~/js/three.min.js"></script>
+    <script src="~/js/postprocessing.min.js"></script>
+    <script>
+        let scene, camera, cloudParticles = [], composer;
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.z = 1;
+            camera.rotation.x = 1.16;
+            camera.rotation.y = -0.12;
+            camera.rotation.z = 0.27;
+
+            let ambient = new THREE.AmbientLight(0x555555);
+            scene.add(ambient);
+
+            let directionalLight = new THREE.DirectionalLight(0xff8c19);
+            directionalLight.position.set(0, 0, 1);
+            scene.add(directionalLight);
+
+            let orangeLight = new THREE.PointLight(0xcc6600, 50, 450, 1.7);
+            orangeLight.position.set(200, 300, 100);
+            scene.add(orangeLight);
+            let redLight = new THREE.PointLight(0xd8547e, 50, 450, 1.7);
+            redLight.position.set(100, 300, 100);
+            scene.add(redLight);
+            let blueLight = new THREE.PointLight(0x3677ac, 50, 450, 1.7);
+            blueLight.position.set(300, 300, 200);
+            scene.add(blueLight);
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            scene.fog = new THREE.FogExp2(0x03544e, 0.001);
+            renderer.setClearColor(scene.fog.color);
+            document.getElementById("srx").appendChild(renderer.domElement);
+
+            let loader = new THREE.TextureLoader();
+            loader.load("/img/Animation/smoke.png", function (texture) {
+                cloudGeo = new THREE.PlaneBufferGeometry(500, 500);
+                cloudMaterial = new THREE.MeshLambertMaterial({
+                    map: texture,
+                    transparent: true
+                });
+
+                for (let p = 0; p < 50; p++) {
+                    let cloud = new THREE.Mesh(cloudGeo, cloudMaterial);
+                    cloud.position.set(
+                        Math.random() * 800 - 400,
+                        500,
+                        Math.random() * 500 - 500
+                    );
+                    cloud.rotation.x = 1.16;
+                    cloud.rotation.y = -0.12;
+                    cloud.rotation.z = Math.random() * 2 * Math.PI;
+                    cloud.material.opacity = 0.55;
+                    cloudParticles.push(cloud);
+                    scene.add(cloud);
+                }
+            });
+            loader.load("/img/Animation/stars.jpg", function (texture) {
+
+                const textureEffect = new POSTPROCESSING.TextureEffect({
+                    blendFunction: POSTPROCESSING.BlendFunction.COLOR_DODGE,
+                    texture: texture
+                });
+                textureEffect.blendMode.opacity.value = 0.2;
+
+                const bloomEffect = new POSTPROCESSING.BloomEffect({
+                    blendFunction: POSTPROCESSING.BlendFunction.COLOR_DODGE,
+                    kernelSize: POSTPROCESSING.KernelSize.SMALL,
+                    useLuminanceFilter: true,
+                    luminanceThreshold: 0.3,
+                    luminanceSmoothing: 0.75
+                });
+                bloomEffect.blendMode.opacity.value = 1.5;
+
+                let effectPass = new POSTPROCESSING.EffectPass(
+                    camera,
+                    bloomEffect,
+                    textureEffect
+                );
+                effectPass.renderToScreen = true;
+
+                composer = new POSTPROCESSING.EffectComposer(renderer);
+                composer.addPass(new POSTPROCESSING.RenderPass(scene, camera));
+                composer.addPass(effectPass);
+
+                window.addEventListener("resize", onWindowResize, false);
+                render();
+            });
+        }
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        function render() {
+            cloudParticles.forEach(p => {
+                p.rotation.z -= 0.001;
+            });
+            composer.render(0.1);
+            requestAnimationFrame(render);
+        }
+        init();
+    </script>
+}

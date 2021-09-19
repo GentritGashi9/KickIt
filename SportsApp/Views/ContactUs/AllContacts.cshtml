@@ -1,0 +1,32 @@
+﻿@model IEnumerable<SportsApp.Models.ContactUs>
+
+@{
+    ViewData["Title"] = "Contacts Data Table";
+}
+
+
+<div class="container" style="padding:20px 0px;min-height:100vh">
+    <div class="text-center tableAdmin" style="margin-bottom:20px;">
+        <div class="text-center yellowsite" style="margin-bottom:20px;">
+            <h4>All Contacts</h4>
+        </div>
+        <hr />
+        <div class="table-responsive">
+            <table id="DT_loadContacts" class="table table-striped table-bordered" style="width:100%">
+                <thead class="light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Title</th>
+                        <th>Details</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/ListAllContacts.js"></script>
+}

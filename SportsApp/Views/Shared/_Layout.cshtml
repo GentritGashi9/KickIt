@@ -1,0 +1,344 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Yoga Studio Template">
+    <meta name="keywords" content="Yoga, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico">
+    <title>Kick It</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin="" />
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" type="text/css">
+    <!--  <link rel="stylesheet" href="~/css/font-awesome.min.css" type="text/css">-->
+    <link rel="stylesheet" href="~/css/flaticon.css" type="text/css">
+    <link rel="stylesheet" href="~/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="~/css/FieldOwner.css" type="text/css">
+    <link rel="stylesheet" href="~/css/FieldOwnerDetails.css" type="text/css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" />
+
+    <link rel="stylesheet"
+          href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" />
+
+
+    <link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/style.css" type="text/css">
+    <link rel="stylesheet" href="~/css/OurStyle.css" type="text/css">
+    <link rel="stylesheet" href="~/OurJS-CSS/style.css" type="text/css">
+
+    <link rel="stylesheet" href="~/GameChat/css/site.css">
+    <link rel="stylesheet" href="~/css/notificationsStyle.css">
+    <link rel="stylesheet" href="~/css/filteredTeams.css">
+    <link rel="stylesheet" href="~/RotatingCard/cssCards/pe-icon-7-stroke.css" />
+    <link rel="stylesheet" href="~/RotatingCard/cssCards/rotating-card.css" />
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+          integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <header class="header-section">
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="logo" style="margin-right:0!important">
+                    <a asp-controller="Home" asp-action="Index"> <img src="~/img/logo.png" alt=""></a>
+                </div>
+                <div class="row">
+                    <div style="text-align: center; margin: auto;">
+                        <ul class="navbar navbar-nav">
+                            <li id="repositionedNotification"></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent" >
+                    <ul class="navbar-nav m-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="ContactUs" asp-action="Create">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="AboutUs">About Us</a>
+                        </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Teams
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    @using Microsoft.AspNetCore.Identity
+                                    @using SportsApp.Data
+                                    @inject SignInManager<ApplicationUser> SignInManager
+                                    @inject UserManager<ApplicationUser> UserManager
+                                    @{
+                                        if (SignInManager.IsSignedIn(User))
+                                        {
+                                            var user = await UserManager.GetUserAsync(User);
+                                            var teamId = user.TeamId;
+                                            if (teamId != null)
+                                            {
+                                                <a class="dropdown-item" asp-route-id="@teamId" asp-controller="Team"
+                                                   asp-action="Details">My Team</a>
+                                            }
+                                            else
+                                            {
+                                                <a class="dropdown-item" asp-controller="Team" asp-action="Create">Create Team</a>
+                                                <a class="dropdown-item" asp-controller="Team" asp-action="Requests">
+                                                    Manage My
+                                                    Requests
+                                                </a>
+
+                                            }
+                                        }
+                                    }
+                                    <a class="dropdown-item" asp-controller="Home" asp-action="Teams">Filtered Teams</a>
+                                </div>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Game Rooms
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-controller="Matches" asp-action="AcceptMatch">Game Requests</a>
+                                    <a class="dropdown-item" asp-controller="Matches" asp-action="ChatRoom">Chat Room</a>
+                                </div>
+                            </li>
+
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Client"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" style="background-color:#fd7603;border-radius:10px"
+                                       href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                       aria-expanded="false">
+                                        SportFields
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                                        <a class="dropdown-item" asp-controller="SportField" asp-action="Create">
+                                            Register a
+                                            SportField
+                                        </a>
+
+                                        <a class="dropdown-item" asp-controller="SportField" asp-action="AllSportFieldsList">
+                                            Your Sport Fields
+                                        </a>
+                                    </div>
+                                </li>
+                            }
+                            else if (User.Identity.IsAuthenticated && !User.IsInRole("Client") && !User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="dropdown-item " style="background-color:#fd7603;border-radius:10px;padding:8px;"
+                                       asp-controller="FieldOwner" asp-action="Create">Become a Field Owner</a>
+                                </li>
+                            }
+
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        AdminStuff
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" asp-controller="Admin" asp-action="ManageUsers">
+                                            Manage Users
+                                        </a>
+                                        <a class="dropdown-item" asp-controller="SportField" asp-action="AllSportFieldsList">
+                                            Manage Sport Fields
+                                        </a>
+                                        <a class="dropdown-item" asp-controller="FieldOwner" asp-action="GetFieldOwners">
+                                            Manage Field Owners
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" asp-controller="Categories" asp-action="AllCategories">
+                                            Categories
+                                        </a>
+                                        <a class="dropdown-item" asp-controller="Team" asp-action="AllTeamsList">
+                                            Teams
+                                        </a>
+                                        <a class="dropdown-item" asp-controller="ContactUs" asp-action="AllContacts">
+                                            Contacts
+                                        </a>
+                                    </div>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <ul class="navbar navbar-nav" style="width:130px!important">
+                        <li>
+                        </li>
+                    </ul>
+                    <ul class="navbar navbar-nav d-flex justify-content-center">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li id="normalNotification">
+                                <div class="navbar-collapse" id="navbarSupportedContent-5">
+                                    <ul class="navbar-nav ml-auto nav-flex-icons">
+                                        <li class="nav-item avatar dropdown">
+                                            <a class="nav-link dropdown-toggle waves-effect waves-light"
+                                            id="navbarDropdownMenuLink-5" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="true">
+                                                <span id="notificationsNumber" class="badge badge-danger ml-2"
+                                                style="display:none"></span>
+                                                <i class="fas fa-bell"></i>
+                                            </a>
+                                            <div id="notifSection"
+                                            class="sparkN dropdown-menu dropdown-menu-lg-right dropdown-menu-md-right dropdown-menu-sm-right dropdown-secondary"
+                                            aria-labelledby="navbarDropdownMenuLink-5">
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link navbar-right userItem" asp-area="Identity"
+                                asp-page="/Account/Manage/Index" title="Manage">
+                                    <strong>
+                                        Hello
+                                        @UserManager.GetUserName(User)!
+                                    </strong>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link navbar-right userItem" asp-area="Identity" asp-page="/Account/Logout"
+                                asp-route-returnUrl="@Url.Page("/")">
+                                    <i class=""></i><strong>Logout</strong>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link navbar-right userItem" asp-area="Identity"
+                                asp-page="/Account/Register"><strong>Register</strong></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link navbar-right userItem" asp-area="Identity"
+                                asp-page="/Account/Login"><strong>Login</strong></a>
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+            </nav>
+            <div id="mobile-menu-wrap"></div>
+        </div>
+    </header>
+    <!-- Header End -->
+
+
+    <div class="justify-content-center">
+        @RenderBody()
+    </div>
+
+    <!-- Footer Section Begin -->
+    <footer class="footer-section spad" style="margin-top:-5px">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 order-2 order-lg-1">
+                    <div class="copyright">
+                        <p class="text-white">
+                            Copyright &copy;
+                            2021 All rights reserved
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-7 text-center text-lg-right order-1 order-lg-2">
+                    <div class="footer-menu">
+                        <a asp-controller="Home" asp-action="Index">Home</a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a asp-controller="Home" asp-action="Teams"> Teams </a>
+                        }
+                        <a asp-controller="Home" asp-action="AboutUs">About Us</a>
+                        <a asp-controller="ContactUs" asp-action="Create">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+    <!-- Js Plugins -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+        crossorigin="anonymous"></script>
+
+    <script src="~/js/jquery-3.3.1.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/js/jquery.slicknav.js"></script>
+    <script src="~/js/owl.carousel.min.js"></script>
+    <script src="~/js/jquery.nice-select.min.js"></script>
+    <script src="~/js/mixitup.min.js"></script>
+    <script src="~/js/main.js"></script>
+    <script src="~/js//OurJavascript.js"></script>
+    <script src="~/OurJS-CSS/OurJs.js"></script>
+  
+    <script src="~/js/notificationsList.js"></script>
+    <script src="~/js/joinNotification.js"></script>
+    <script src="~/js/RepositionNotification.js"></script>
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+
+
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
+
+
+    @RenderSection("Scripts", required: false)
+</body>
+
+</html>

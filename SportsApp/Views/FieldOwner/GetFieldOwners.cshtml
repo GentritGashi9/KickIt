@@ -1,0 +1,30 @@
+@using SportsApp.Data;
+
+<div class="container" style="min-height:600px">
+    <div class="text-center tableAdmin">
+        <div class="text-center yellowsite">
+            <h4>All Field Owners</h4>
+            <a class="btn neonbutton" style="margin-top:20px" asp-controller="FieldOwner" asp-action="Create">Register a Field Owner</a>
+        </div>
+        <hr />
+
+        <div class="table-responsive ">
+            <table id="DT_loadOwner" class="table table-striped table-bordered" style="width:100%">
+                <thead class="light">
+                    <tr>
+                        <th>BussinessName</th>
+                        <th>Address</th>
+                        <th>ContactNr</th>
+                        <th>Details</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+    </div>
+</div>
+@section Scripts{
+    <script src="~/js/FieldOwner.js"></script>
+}

@@ -1,0 +1,142 @@
+﻿#ButtonAnimation {
+    position: absolute;
+    top: 65%;
+    left: 39%;
+}
+@media (max-width: 1220px) {
+    #ButtonAnimation {
+        left: 37%;
+    }
+}
+@media (max-width: 1120px) {
+    #ButtonAnimation {
+        left: 36%;
+    }
+}
+@media (max-width: 1020px) {
+    #ButtonAnimation {
+        left: 33%;
+    }
+}
+@media (max-width: 920px) {
+    #ButtonAnimation {
+        left: 31%;
+    }
+}
+@media (max-width: 768px) {
+    #ButtonAnimation {
+        left: 29%;
+    }
+}
+.neonG{
+
+}
+.neonG:hover {
+    background-color: #b6ff00 !important;
+    box-shadow: 0 0 10px #b6ff00, 0 0 40px #b6ff00,0 0 50px #b6ff00,0 0 70px #b6ff00!important;
+}
+a.neonbuttonF {
+    position: relative;
+    display: inline-block;
+    padding: 15px 30px;
+    color: white;
+    cursor:pointer;
+    font-weight: 900;
+    font-size: 16px;
+    text-decoration: none;
+    overflow: hidden;
+    transition: 0.3s;
+    background-color: transparent;
+    -webkit-box-reflect: below 1px linear-gradient(transparent,#0005)
+}
+
+a.neonbuttonF:hover {
+    color: whitesmoke;
+    background-color: #ffc107;
+    box-shadow: 0 0 10px #ffc107, 0 0 40px #ffc107,0 0 50px #ffc107,0 0 70px #ffc107;
+    transition-delay: 1s;
+}
+
+a.neonbuttonF span {
+    position: absolute;
+    display: block;
+}
+
+a.neonbuttonF:hover span:nth-child(1) {
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg,transparent,#fff);
+    animation: AnimationChild1 linear 1s ;
+}
+
+@keyframes AnimationChild1 {
+    0% {
+        left: -100%;
+    }
+
+    50%,100% {
+        left: 100%;
+    }
+}
+
+a.neonbuttonF:hover span:nth-child(2) {
+    top: -100%;
+    right: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg,transparent,#fff);
+    animation: AnimationChild2 linear 1s ;
+    animation-delay: 0.25s;
+}
+
+@keyframes AnimationChild2 {
+    0% {
+        top: -100%;
+    }
+
+    50%,100% {
+        top: 100%;
+    }
+}
+
+a.neonbuttonF:hover span:nth-child(3) {
+    bottom: 0;
+    right: -100%;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(270deg,transparent,#fff);
+    animation: AnimationChild3 linear 1s ;
+    animation-delay: 0.5s;
+}
+
+@keyframes AnimationChild3 {
+    0% {
+        right: -100%;
+    }
+
+    50%,100% {
+        right: 100%;
+    }
+}
+
+a.neonbuttonF:hover span:nth-child(4) {
+    bottom: -100%;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(360deg,transparent,#fff);
+    animation: AnimationChild4 linear 1s ;
+    animation-delay: 0.75s;
+}
+
+@keyframes AnimationChild4 {
+    0% {
+        bottom: -100%;
+    }
+
+    50%,100% {
+        bottom: 100%;
+    }
+}

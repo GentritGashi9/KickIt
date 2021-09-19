@@ -1,0 +1,191 @@
+﻿@model SportsApp.Views.SportField.SportFieldViewModel;
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "New";
+}
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-select.css" type="text/css"/>
+<div class="sportFieldCreate" style="padding: 100px 0px">
+    <div class="sportFieldCreateTitle">
+        <h4 class="title">Register a sport field </h4><br>
+        <h5 class="subtitle text-danger">Notice Your Field will be created and send to an
+            administrator for review before beeing approved or refused!</h5>
+    </div>
+    <div class="col-md-10 mx-auto py-4">
+        <div class="card sportfieldCard">
+            <div class="card-header primaryColor text-uppercase text-white">
+                <h4>Sport field Info : </h4>
+            </div>
+            <div class="card-body">
+                <form enctype="multipart/form-data" asp-action="Create">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Name" class="control-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Address" class="control-label"></label>
+                                <input asp-for="Address" class="form-control" />
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="ContactNr" class="control-label"></label>
+                                <input asp-for="ContactNr" class="form-control" />
+                                <span asp-validation-for="ContactNr" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Pictures" class="control-label"></label>
+                                <div class="custom-file">
+                                    <input asp-for="Pictures" multiple class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                                <span asp-validation-for="Pictures" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Categories" class="control-label">Category</label></br>
+                                <select id="categoryList" asp-for="CategoryId" class="selectpicker show-tick"
+                                    asp-items='@(new SelectList(Model.Categories,"Id","Name"))'
+                                    style="width:100%;height:fit-content;font-size:20px;">
+                                </select>
+                                <span asp-validation-for="Categories" class="text-danger"></span>
+                            </div>
+                            <div class="form-group" hidden>
+                                <label asp-for="SportFieldGeoLocationLat" class="control-label"
+                                    style="margin-top: 20px;">
+                                    Latitude:
+                                </label>
+                                <input id="lat" asp-for="SportFieldGeoLocationLat" class="form-control" readonly
+                                    value="" />
+                                <span asp-validation-for="SportFieldGeoLocationLat" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label asp-for="SportFieldGeoLocationLong" class="control-label">Longitude:</label>
+                            <input id="long" asp-for="SportFieldGeoLocationLong" class="form-control" readonly
+                                   value="" />
+                            <span asp-validation-for="SportFieldGeoLocationLong" class="text-danger"></span>
+                            <input id="CorrectLat" asp-for="Latitude" value="" readonly />
+                            <input id="CorrectLong" asp-for="Longitude" value="" readonly />
+                        </div>
+                        <div class="form-group" style="width:100%">
+                            <label id="selp" asp-for="Workingdays" class="control-label">Working Days:</label><br>
+                            <select style="width:100%" class="selectpicker show-tick" asp-for="Workingdays"
+                                asp-items="@Html.GetEnumSelectList(typeof(SportsApp.Models.Days))" multiple>
+                                <!--<option value="" readonly disabled selected hidden>Please chose your working days...</option>-->
+                            </select>
+                            <span asp-validation-for="Workingdays" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+
+                            <label>Working Hours :</label><br />
+                            <span asp-validation-for="StartTime" class="text-danger"></span>
+                            <span asp-validation-for="EndTime" class="text-danger"></span>
+                            <label asp-for="StartTime" class="control-label"> </label>
+                            <input asp-for="StartTime" type="time" step="3600" class="form-control" value="" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="EndTime" class="control-label"> </label>
+                            <input asp-for="EndTime" type="time" step="3600" class="form-control" value="" />
+                            <input type="submit" value="submit"
+                                   class="btn btn-sm btn-submit rounded-1 text-uppercase" style="margin-top: 20px;" />
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                            <span asp-validation-for="SportFieldGeoLocationLong" class="text-danger"></span>
+                            <label>Please select the Location of your Sportfield:</label></br>
+                            <div id="map" style="height:300px;width:100%;border-radius:10px;">
+                            </div>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script src="~/js/FixSlidepop.js"></script>
+<script>
+    var mymap = L.map('map').setView([42.638000, 21.131442], 13);
+
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'sk.eyJ1IjoiZGV3YXI0MDExNSIsImEiOiJja3JnM3c3OGEwZHoyMzFxbmdwbTBncTg5In0.JlLGTEanR3VxCPkOCnnbKA'
+    }).addTo(mymap);
+
+    var popup = L.popup();
+
+    function onMapClick(e) {
+        popup
+            .setLatLng(e.latlng)
+            .setContent("You clicked the map at " + e.latlng.toString() + " \n Are u sure this is the correct Location? ")
+            .openOn(mymap);
+        document.getElementById("lat").value = e.latlng.lat;
+        document.getElementById("long").value = e.latlng.lng;
+        document.getElementById("CorrectLat").value = e.latlng.lat;
+        document.getElementById("CorrectLong").value = e.latlng.lng;
+    }
+
+    mymap.on('click', onMapClick);
+
+    $(document).ready(function () {
+        $('.custom-file-input').on("change", function () {
+            var fileLabel = $(this).next('.custom-file-label');
+            var files = $(this)[0].files;
+            if (files.length > 1) {
+                fileLabel.html(files.length + ' files selected');
+            }
+            else if (files.length == 1) {
+                fileLabel.html(files[0].name);
+            }
+        });
+    });
+</script>
+<script>
+    function Send() {
+        var x = $("#long").val();
+        var y = $("#lat").val();
+        console.log(x);
+        console.log(y);
+        $.ajax({
+            type: "GET",
+            url: "/SportField/Test",
+            dataType: "json",
+            data: { lat: y, longitude: x },
+            success: function (data) {
+                if (data.success) {
+                } else {
+                }
+            }
+        });
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        setTimeout(() => change(), 400);
+    });
+    function change() {
+        $('#selp').next().next().css("width", "100%")
+    }
+</script>
+}

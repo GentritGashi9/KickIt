@@ -1,0 +1,44 @@
+﻿@model SportsApp.Models.Category
+
+@{
+    ViewData["Title"] = "Create Sport Category";
+}
+
+
+<div class="row justify-content-center" style="margin:30px 0px;">
+    <div class="col-md-4">
+        <h2>@ViewData["Title"]</h2>
+
+        @* <h4>Category</h4> *@
+        <hr />
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxCapacity" class="control-label"></label>
+                <input asp-for="MaxCapacity" class="form-control" />
+                <span asp-validation-for="MaxCapacity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MinCapacity" class="control-label"></label>
+                <input asp-for="MinCapacity" class="form-control" />
+                <span asp-validation-for="MinCapacity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

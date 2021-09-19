@@ -1,0 +1,85 @@
+﻿@{
+
+}
+<link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css" />
+<link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting-cells.css" />
+<link rel="stylesheet" href="~/Parallax/Style/Rain.css" />
+<link rel="stylesheet" href="~/Parallax/Style/style.css" />
+<link rel="stylesheet" href="~/Parallax/Style/BlackHole.css" />
+<link rel="stylesheet" href="~/Parallax/Style/NeonButtonFixed.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+
+
+<div class="backDiv">
+    <div class="under"></div>
+</div>
+<div class="container1">
+    <ul id="scene">
+        <li class="layer " data-depth="1">
+            <img class="img-responsive greystyle" src="~/Parallax/Home/ImagesFloating/Tennis.png" />
+        </li>
+        <li class="layer" data-depth="0.8">
+            <img class="img-responsive greystyle" src="~/Parallax/Home/ImagesFloating/Basket1.png" />
+        </li>
+        <li class="layer " data-depth="0.5">
+            <img class="img-responsive greystyle" src="~/Parallax/Home/ImagesFloating/Football.png" />
+        </li>
+        <li class="layer " data-depth="-0.6">
+            <img class="img-responsive greystyle" src="~/Parallax/Home/ImagesFloating/Cycling.png" />
+        </li>
+        <li class="layer " data-depth="-0.8">
+            <img class="img-responsive greystyle" src="~/Parallax/Home/ImagesFloating/Kayak.png" />
+        </li>
+        <li class="layer " data-depth="-0.3">
+            <img class="img-responsive greystyle" src="~/Parallax/Home/ImagesFloating/Golf.png" />
+        </li>
+        <li class="layer " data-depth="0.8">
+            <img class="img-responsive greystyle" src="~/Parallax/Home/ImagesFloating/Volleyball.png" />
+        </li>
+    </ul>
+</div>
+<div id="Split" class="text-center personalFont" data-splitting>Kick It</div>
+<div id="ButtonAnimation" style="margin-left: auto;margin-right: auto;left: 0;right: 0;text-align: center;">
+    @if (!User.Identity.IsAuthenticated)
+    {
+
+        <a class="neonbuttonF" asp-area="Identity" asp-page="/Account/Register">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            Get Started
+        </a>
+        <a class="neonbuttonF neonG" asp-area="Identity" asp-page="/Account/Login">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            Already Member
+        </a>
+
+    }
+    else
+    {
+        <a class="neonbuttonF neonG" asp-controller="Home" asp-action="Teams">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            Start Playing
+        </a>
+    }
+</div>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/parallax/3.1.0/parallax.js"></script>
+<script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+<script src="~/Parallax/parallax.min.js"></script>
+<script>
+    var scene = document.getElementById('scene');
+    var parallax = new Parallax(scene);
+    Splitting();
+
+</script>

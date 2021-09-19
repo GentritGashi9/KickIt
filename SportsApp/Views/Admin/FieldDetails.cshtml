@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Details";
+    var paths = (List<string>)ViewData["Paths"];
+    var field = (SportField)ViewData["Field"];
+
+}
+<div class="text-center" style="margin-bottom:30px;margin-top:30px;">
+    <h4>SportField:</h4>
+    <hr />
+    <div class="col-md-6 offset-3">
+        <dl class="row">
+            <dt class="col-sm-6">
+                Name
+            </dt>
+            <dd class="col-sm-6">
+                @field.Name
+            </dd>
+            <dt class="col-sm-6">
+                Adress
+            </dt>
+            <dd class="col-sm-6">
+                @field.Address
+            </dd>
+            <dt class="col-sm-6">
+                Contact Number
+            </dt>
+            <dd class="col-sm-6">
+                @field.ContactNr
+            </dd>
+            <dt class="col-sm-6">
+                Location
+            </dt>
+            <dd class="col-sm-6">
+                Lat: @field.SportFieldGeoLocationLat - Long: @field.SportFieldGeoLocationLong
+            </dd>
+        </dl>
+    </div>
+    <div class="row text-center">
+        <div class="row col-md-12">
+            <div class="col-md-12 text-primary" style="font-size:36px;">Field Images:</div>
+            <div class="col-md-12">
+               @foreach (string path in paths)
+                {
+                    <img style="border: 1px solid #007bff; border-radius:50%" src="~/img/sportFieldPictures/@path" width="200" height="200" />
+                }
+            </div>
+        </div>
+        <div class="col-md-12 d-inline" style="margin-top:30px;">
+            <span>Go back to pending fields list: </span>
+            <a class="btn btn-primary" style="border-radius:50%;" asp-controller="Admin" asp-action="ManageFields"><i class="fas fa-reply"></i></a>
+        </div>
+    </div>
+</div>

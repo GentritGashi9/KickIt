@@ -1,0 +1,128 @@
+﻿@model SportsApp.Controllers.AdminController
+@{
+}
+
+<div class="container">
+    <div class="text-center tableAdmin">
+        <div class="text-center yellowsite" style="padding:10px 0px">
+            <h5 style="margin-bottom:10px;">Create a new User:</h5>
+            <a class="neonbutton" data-toggle="modal" data-target="#ModalNewUser">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                New User
+            </a>
+        </div>
+        <div class="table-responsive" style="padding-top:10px">
+            <table id="DT_load" class="table table-striped table-bordered" style="width:100%">
+                <thead class="light">
+                    <tr>
+                        <th>UserName</th>
+                        <th>Email</th>
+                        <th>Name</th>
+                        <th>Surname</th>
+                        <th>DateOfBirth</th>
+                        <th>Role</th>
+                        <th>ProfileImg</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalNewUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" style="margin-top:20px;display:flex;justify-content:center;align-items:center;">
+                    Create a new User.
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" asp-controller="Admin" asp-action="AddNewUser" id="myform" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6 text-center ">
+                                <div class="form-group">
+                                    <label asp-for="Input.Email"></label>
+                                    <i class="far fa-envelope"></i>
+                                    <input asp-for="Input.Email" class="form-control" />
+                                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Input.Name"></label>
+                                    <i class="fas fa-info-circle"></i>
+                                    <input asp-for="Input.Name" class="form-control" />
+                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Input.Surname"></label>
+                                    <i class="fas fa-info-circle"></i>
+                                    <input asp-for="Input.Surname" class="form-control" />
+                                    <span asp-validation-for="Input.Surname" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Input.User">Username</label>
+                                    <i class="fas fa-user-circle"></i>
+                                    <input asp-for="Input.User" class="form-control" />
+                                    <span asp-validation-for="Input.User" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <div class="form-group">
+                                    <label>Your Profile Image:</label>
+                                    <i class="fas fa-image"></i>
+                                    <input class="form-control" type="file" asp-for="Input.File" />
+                                    <span asp-validation-for="Input.File" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Input.Location"></label>
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <div style="width:100%">
+                                        <select asp-for="Input.Location" class="selectpicker show-tick form-control" data-live-search="true" asp-items="@Html.GetEnumSelectList(typeof(SportsApp.Models.Cities))">
+                                            <option value="" disabled selected hidden>Please choose your city...</option>
+                                        </select>
+                                    </div>
+                                    <span asp-validation-for="Input.Location" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Input.Password"></label>
+                                    <i class="fas fa-key"></i>
+                                    <div class="inputWrap">
+                                        <input asp-for="Input.Password" class="form-control" id="pwinput" />
+                                        <span class="eye" onclick="UnhideP()"><i class="fas fa-eye" id="UnhP"></i><i class="fas fa-eye-slash" style="display:none;" id="UnhP1"></i></span>
+                                    </div>
+                                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Input.DateOfBirth">Date of Birth</label>
+                                    <input asp-for="Input.DateOfBirth" class="form-control" type="date" min="1960-01-01" max="2020-12-31" />
+                                    <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" onclick="">Add New User</button>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+      <script src="~/Swal/Swal.js"></script>
+    <script src="~/Swal/Banning.js"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

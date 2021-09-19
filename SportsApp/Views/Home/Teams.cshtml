@@ -1,0 +1,258 @@
+﻿@{
+    Layout = "_Layout";
+    List<Category> categories = (List<Category>)ViewData["Categories"];
+    List<SportFieldCategory> sportFields = (List<SportFieldCategory>)ViewData["SportFields"];
+    string categoryTeam = "";
+    if(sportFields.Count != 0){
+        categoryTeam = sportFields[0].CategoryName;
+    }
+}
+
+<!-- Hero Section Begin -->
+<section class="hero-section set-bg" data-setbg="img/background1.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="hero-text">
+                    <div class="text-center" style="padding-top:20px">
+                        <img src="~/img/placeholder.png" alt="">
+                        <h1 style="font-weight: 700;font-size: 50px;text-shadow: 1px 1px #000000;">Let's play some
+                            sport!</h1>
+                    </div>
+                    <div class="filter-search row">
+                        <div class="category-search col-lg-4 col-md-4 col-sm-6">
+                            <h5>Select Sport</h5>
+                            <select class="ca-search ">
+                                @foreach (var category in categories)
+                                {
+                                    <option value="@category.Id">@category.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="location-search col-lg-4 col-md-4 col-sm-6">
+                            <h5>Your Location</h5>
+                            <select class="lo-search" data-live-search="true" style="max-height: 200px;"
+                                    asp-items="@Html.GetEnumSelectList(typeof(SportsApp.Models.Cities))">
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6  offset-lg-0 offset-md-0 offset-sm-3"
+                            style="justify-content: center;display: flex;align-items: flex-end;">
+                            <button type="button" class=" btn search-filterButton"  style="height: 50px;width: 100%;margin:0!important;" onclick="FilterTeam()">Search
+                                Teams</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Hero Section End -->
+<!-- Trending Teams Section Begin -->
+<section class="trending-restaurant spad" id="divTeams">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2>Top trending Teams for your city!</h2>
+                    <p>Explore some of the best Teams that want to play your Sport!</p>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="filteredTeams">
+
+        </div>
+        @if (ViewData["CurrentUserTeamId"] != null)
+        {
+            var teamId = (string)ViewData["CurrentUserTeamId"];
+            <div hidden><input id="yourTeamId" value="@teamId" hidden /></div>
+        }
+    </div>
+</section>
+
+<div class="modal fade" id="ModalMap" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="max-width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" style="margin-top:20px;display:flex;justify-content:center;align-items:center;font-size:22px;">
+                    Select in which @categoryTeam field u want to play in!
+                </h5>
+                <span id="error" style="color: red;position:absolute;bottom:10px;"></span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+                <div>
+                    <div class="row">
+                    <div  class="col-md-8" id="mapTeams" style="border: 0px; height: 400px; position: sticky !important; z-index: 0;border-radius:10px;">
+                        
+                    </div>
+                    <div class="col-md-4 justify-content-center" >
+                        <h3 class="text-center">Schedules</h3>
+                        <div>
+                            
+
+                            <div id="datepicker" ></div>
+                            
+                            <select class="form-control" name="schedules" id="schedules" style="font-size: 20px!important;padding:5px;" hidden></select>
+                            <h5 id="noSchedules" style="color: red;" hidden></h5>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="onClose()">Close</button>
+                    <button type="submit" class="btn btn-primary" onclick="requestMatch('@Url.Action("AskForMatch","Matches")')" >Request to play</button>
+                </div>
+        </div>
+        <input type="hidden" id="sportfieldId" value=""/>
+                        <input type="hidden" id="team2" value="">
+                        <input type="hidden" id="yourTeamId" value='@ViewData["CurrentUserTeamId"]'/>
+                        <input type="hidden" id="startTime" value=""/>
+                        <input type="hidden" id="endTime" value=""/>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+<script type="text/javascript" src="~/js/filterTeam.js">
+</script>
+<script type="text/javascript">
+    var selectedSportFieldId;
+    var sday = '@DateTime.Now.ToString("d")';
+    $('#datepicker').datepicker({
+            todayHighlight: true,
+            startDate: '@DateTime.Now.ToString("d")',
+            format: "mm/dd/yyyy"
+        });
+        $('#datepicker').on('changeDate', function(e) {
+            sday = e.format("mm/dd/yyyy");
+            if (!selectedSportFieldId) {
+                //error message
+                document.getElementById('error').innerHTML = 'Please Select the sport field and the schedule!';
+
+            } else {
+                $.ajax({
+                    url: '@Url.Action("Schedules", "SportField")',
+                    type: "GET",
+                    dataType: "json",
+                    data: { id: `${selectedSportFieldId}`, day: `${sday}` },
+                    success: function (data) {
+                        document.getElementById('error').innerHTML = "";
+                        document.getElementById('schedules').innerHTML = "";
+                        
+                        document.getElementById('sportfieldId').value = `${selectedSportFieldId}`;
+                        if (data.length <= 0) {
+                            document.getElementById('noSchedules').removeAttribute(`hidden`);
+                            document.getElementById('schedules').setAttribute("hidden","");
+                            document.getElementById('noSchedules').innerHTML = "No available schedules for this date!"
+                        } else {
+                            document.getElementById('noSchedules').setAttribute("hidden","");
+                            var value = data[0].startTime + '_' + data[0].endTime;
+                            var array = value.split('_');
+                            document.getElementById('startTime').value = array[0];
+                            document.getElementById('endTime').value = array[1];
+                            for (var i = 0; i < data.length; i++) {
+                                document.getElementById('schedules').removeAttribute(`hidden`);
+                                document.getElementById('schedules').innerHTML += '<option style="font-size: 20px;" value="' + data[i].startTime + '_' + data[i].endTime + '">' + data[i].startTime.substr(11, 5) + ' - ' + data[i].endTime.substr(11, 5) + ' </option>'
+                            }
+                        }
+
+                    }
+                });
+            }
+        });
+
+
+
+    
+    
+        function loadSportFields(){
+
+         @foreach (var sportField in sportFields) {
+         @if (sportField.SportFieldGeoLocationLat != 0 && sportField.SportFieldGeoLocationLong != 0)
+         {
+
+            // @: is used to write Javascript inside C#
+            // <text> </text> tag can be used to encapsulate javascript instead of "@:" but it dosent offer IDE features
+            @:fontAwesomeIcon = L.icon({
+            @:   iconUrl: "/img/categories/sports/@sportField.CategoryName" + ".png",
+            @:   iconSize: [40, 40],
+            @:   className: 'myDivIcon',
+            @:   popupAnchor: [5,-10]
+            @:   });
+            @:   var x = "@sportField.SportFieldGeoLocationLat";
+            @:   var correctLat = x.replace(",", ".");
+            @:   var y = "@sportField.SportFieldGeoLocationLong";
+            @:   var correctLong = y.replace(",",".");
+            @:var marker = L.marker([correctLat, correctLong], { icon: fontAwesomeIcon }).addTo(teamMap);
+            @:
+            @:
+            @:L.DomEvent.addListener(marker, 'click', function(e) {
+            @:    $.ajax({
+            @:    url: '@Url.Action("Schedules", "SportField")',
+            @:    type: "GET",
+            @:    dataType: "json",
+            @:    data: { id: `@sportField.SportFieldId`, day: `${sday}` },
+            @:    success: function (data) {
+            @:    document.getElementById('schedules').innerHTML = "";
+            @:    document.getElementById('sportfieldId').value = '@sportField.SportFieldId';
+            @:    selectedSportFieldId = '@sportField.SportFieldId';
+            @:    if(data.length <= 0 ){
+            @:      document.getElementById('noSchedules').removeAttribute(`hidden`);
+            @:      document.getElementById('noSchedules').innerHTML = "No schedules Available for today!"
+            @:    }else{
+            @:    var value = data[0].startTime + '_' + data[0].endTime;
+            @:    var array = value.split('_');
+            @:    document.getElementById('startTime').value = array[0];
+            @:    document.getElementById('endTime').value = array[1];
+            @:    for(var i =0; i < data.length; i++){
+            @:       document.getElementById('schedules').removeAttribute(`hidden`);
+            @:       document.getElementById('schedules').innerHTML += '<option style="font-size: 20px;" value="'+data[i].startTime+'_'+data[i].endTime+'">'+data[i].startTime.substr(11, 5) + ' - '+ data[i].endTime.substr(11, 5) +' </option>'
+            @:    }
+            @:}
+            @:
+            @:    }
+            @:}); }, marker);
+            @:marker.bindPopup(`@sportField.Name <img src="/img/sportFieldPictures/@sportField.MainPicture" onerror="this.onerror=null;this.src='/img/sportFieldPictures/noImage.png';"/>`);
+          }
+
+        }}
+
+        var fontAwesomeIcon;
+
+        function onClose(){
+            document.getElementById('sportfieldId').value = '';
+            document.getElementById('team2').value = '';
+            document.getElementById('startTime').value = '';
+            document.getElementById('endTime').value = '';
+            document.getElementById('error').innerHTML ='';
+            document.getElementById('noSchedules').innerHTML = "";
+        }
+        $('#days').on('change', function () {
+            var value = this.value
+            sday = value;
+            
+        });
+
+        $('#schedules').on('change', function() {
+            var value =  this.value
+            var array = value.split('_');
+            document.getElementById('startTime').value = array[0];
+            document.getElementById('endTime').value = array[1];
+        });
+</script>
+
+
+
+<script>
+        $(document).ready(function () {
+            FilterAllTeams();
+        });
+         $('#ModalMap').on('show.bs.modal', function (event) {
+            loadSportFields();
+        });
+</script>
+}

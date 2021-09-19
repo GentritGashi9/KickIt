@@ -1,0 +1,77 @@
+﻿@using SportsApp.Data
+@model SportsApp.Controllers.AdminController
+@{ 
+    var user = (ApplicationUser)ViewData["user"];
+}
+<div>
+    <h1 style="text-align: center">@ViewData["Title"]</h1>
+    <form asp-controller="Admin" asp-action="EditUserD" asp-route-id="@user.Id" method="post" enctype="multipart/form-data">
+        <h4 style="margin-top:20px;display:flex;justify-content:center;align-items:center;">Create a new account.</h4>
+        <hr />
+        <div asp-validation-summary="All" class="text-danger text-center"></div>
+        <div class="container">
+
+            <div class="row justify-content-center">
+
+                <div class="col-md-6 text-center ">
+
+                    <div class="form-group">
+                        <label asp-for="InputE.Email"></label>
+                        <i class="far fa-envelope"></i>
+                        <input asp-for="InputE.Email" class="form-control" value="@user.Email"/>
+                        <span asp-validation-for="InputE.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="InputE.Name"></label>
+                        <i class="fas fa-info-circle"></i>
+                        <input asp-for="InputE.Name" class="form-control" value="@user.Name"/>
+                        <span asp-validation-for="InputE.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="InputE.Surname"></label>
+                        <i class="fas fa-info-circle"></i>
+                        <input asp-for="InputE.Surname" class="form-control" value="@user.Surname"/>
+                        <span asp-validation-for="InputE.Surname" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="InputE.User">Username</label>
+                        <i class="fas fa-user-circle"></i>
+                        <input asp-for="InputE.User" class="form-control" value="@user.UserName"/>
+                        <span asp-validation-for="InputE.User" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <div class="form-group">
+                        <label>Enter Your Profile Image:</label>
+                        <i class="fas fa-image"></i>
+                        <input class="form-control" type="file" asp-for="InputE.File" />
+                        <span asp-validation-for="InputE.File" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="InputE.Location"></label>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div style="width:100%">
+                            <select asp-for="InputE.Location" class="selectpicker show-tick form-control" data-live-search="true" asp-items="@Html.GetEnumSelectList(typeof(SportsApp.Models.Cities))">
+                                <option value="" disabled selected hidden>Please choose your city...</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="InputE.Location" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="InputE.DateOfBirth">Date of Birth</label>
+                        <input asp-for="InputE.DateOfBirth" class="form-control" type="date" min="1960-01-01" max="2020-12-31" value="@user.DateOfBirth.Date" />
+                        <span asp-validation-for="InputE.DateOfBirth" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="text-center " style="margin-top:20px;display:flex;justify-content:center;align-items:center;">
+            <button type="submit" class="btn btn-primary" style="margin-bottom: 20px">Edit</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

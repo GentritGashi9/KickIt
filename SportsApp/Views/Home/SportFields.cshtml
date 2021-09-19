@@ -1,0 +1,260 @@
+﻿@model List<SportsApp.Models.SportFieldCategory>
+
+@{
+    Layout = "_Layout";
+    List<Category> categories = (List<Category>)ViewData["Categories"];
+
+}
+
+<!-- Map Section Begin -->
+<div id="map"  style="border: 0px; height: 657px; position: sticky!important;z-index:0;">
+</div>
+<!-- Map Section End -->
+<!-- Search Filter Section Begin -->
+<section class="search-filter spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <form action="#" class="filter-search">
+                    <div class="category-search">
+                        <h5>Search Category</h5>
+                        <select class="ca-search">
+                            @foreach (var item in categories)
+                            {
+                                <option>@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="location-search">
+                        <h5>Your Location</h5>
+                        <select class="lo-search">
+                            <option>New York</option>
+                        </select>
+                    </div>
+                    <button type="submit">Search Now</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Search Filter Section End -->
+<!-- Filter Section Begin -->
+<section class="filter-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="filter-left">
+                    <div class="category-filter">
+                        <h3>Category Filter</h3>
+                        <div class="category-option">
+                            <div class="co-item">
+                                <input type="radio">
+                                <label class="active">Restaurants</label>
+                            </div>
+                            <div class="co-item">
+                                <input type="radio">
+                                <label>Hotels</label>
+                            </div>
+                            <div class="co-item">
+                                <input type="radio">
+                                <label>Resorts & spa</label>
+                            </div>
+                            <div class="co-item">
+                                <input type="radio">
+                                <label>Bars & Pubs</label>
+                            </div>
+                            <div class="co-item">
+                                <input type="radio">
+                                <label>Clubs</label>
+                            </div>
+                            <div class="co-item">
+                                <input type="radio">
+                                <label>Shopping Malls</label>
+                            </div>
+                            <div class="co-item">
+                                <input type="radio">
+                                <label>Education</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rating-filter">
+                        <h3>Ratings</h3>
+                        <div class="rating-option">
+                            <div class="ro-item">
+                                <input type="radio">
+                                <label class="active">5.0</label>
+                                <div class="rating-pic">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="ro-item">
+                                <input type="radio">
+                                <label>4.0</label>
+                                <div class="rating-pic">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star grey-bg"></i>
+                                </div>
+                            </div>
+                            <div class="ro-item">
+                                <input type="radio">
+                                <label>3.0</label>
+                                <div class="rating-pic">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star grey-bg"></i>
+                                    <i class="fa fa-star grey-bg"></i>
+                                </div>
+                            </div>
+                            <div class="ro-item">
+                                <input type="radio">
+                                <label>2.0</label>
+                                <div class="rating-pic">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star grey-bg"></i>
+                                    <i class="fa fa-star grey-bg"></i>
+                                    <i class="fa fa-star grey-bg"></i>
+                                </div>
+                            </div>
+                            <div class="ro-item">
+                                <input type="radio">
+                                <label>1.0</label>
+                                <div class="rating-pic">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star grey-bg"></i>
+                                    <i class="fa fa-star grey-bg"></i>
+                                    <i class="fa fa-star grey-bg"></i>
+                                    <i class="fa fa-star grey-bg"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="distance-filter">
+                        <h3>Distance</h3>
+                        <div class="distance-option">
+                            <div class="do-item">
+                                <input type="radio">
+                                <label class="active">0.0-0.3km</label>
+                            </div>
+                            <div class="do-item">
+                                <input type="radio">
+                                <label>0.3-0.6km</label>
+                            </div>
+                            <div class="do-item">
+                                <input type="radio">
+                                <label>0.6-0.9km</label>
+                            </div>
+                            <div class="do-item">
+                                <input type="radio">
+                                <label>1.0-3.0km</label>
+                            </div>
+                            <div class="do-item">
+                                <input type="radio">
+                                <label>3.0-10.0km</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form action="#" class="arrange-select">
+                            <span>Arrange by</span>
+                            <select>
+                                <option>Newest</option>
+                                <option>Oldest</option>
+                            </select>
+                        </form>
+                    </div>
+                    @foreach (var sportField in Model)
+                    {
+                        <div class="col-lg-4 col-sm-6">
+                            <a asp-action="Details" asp-route-id="@sportField.SportFieldId" asp-controller="sportfield"
+                            class="arrange-items">
+                                <div class="arrange-pic">
+                                    @if (sportField.MainPicture == null)
+                                    {
+                                        <img src="~/img/sportFieldPictures/noImage.png"><img />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/img/sportFieldPictures/@sportField.MainPicture" alt="">
+                                    }
+                                    <div class="rating">4.9</div>
+                                    <div class="tic-text">@sportField.CategoryName</div>
+                                </div>
+                                <div class="arrange-text">
+                                    <h5>@sportField.Name</h5>
+                                    <span>@sportField.Address</span>
+                                    <p>@sportField.FieldOwner</p>
+                                    <div class="open tomorrow">@sportField.ContactNr</div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+
+                    <div class="col-lg-12 text-right">
+                        <div class="pagination-num">
+                            <a href="#">01</a>
+                            <a href="#">02</a>
+                            <a href="#">03</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Filter Section End -->
+
+<style>
+    .myDivIcon {
+        text-align: left;
+        /* Horizontally center the text (icon) */
+        line-height: 20px;
+        /* Vertically center the text (icon) */
+    }
+</style>
+
+@section Scripts {
+<script>
+    var mymap = L.map('map', { scrollWheelZoom: false }).setView([42.638000, 21.131442], 10);
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        gestureHandling: true,
+        zoomOffset: -1,
+        accessToken: 'sk.eyJ1IjoiZGV3YXI0MDExNSIsImEiOiJja3JnM3c3OGEwZHoyMzFxbmdwbTBncTg5In0.JlLGTEanR3VxCPkOCnnbKA'
+    }).addTo(mymap);
+
+    var fontAwesomeIcon;
+    
+    @foreach (var sportField in Model) { 
+        @if (sportField.SportFieldGeoLocationLat != 0 && sportField.SportFieldGeoLocationLong != 0)
+        {
+            // @: is used to write Javascript inside C# 
+            // <text> </text> tag can be used to encapsulate javascript instead of "@:" but it dosent offer IDE features
+            @:fontAwesomeIcon = L.divIcon({
+            @:   html: '<i class="fa fa-futbol fa-3x"></i>',
+            @:   iconSize: [20, 20],
+            @:   className: 'myDivIcon',
+            @:   popupAnchor: [5,-10]
+            @:   });
+            @:var marker = L.marker([@sportField.SportFieldGeoLocationLat, @sportField.SportFieldGeoLocationLong],{icon: fontAwesomeIcon}).addTo(mymap);
+            @:
+            @:marker.bindPopup(`@sportField.Name <img src="/img/sportFieldPictures/@sportField.MainPicture"/> `);
+        }
+    }
+</script>
+}

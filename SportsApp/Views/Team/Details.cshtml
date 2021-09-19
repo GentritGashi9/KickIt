@@ -1,0 +1,345 @@
+@model SportsApp.Models.Team
+@using SportsApp.Data
+
+@{
+    string currentUser = (string)ViewData["CurrentUserName"];
+    string categoryName = (string)ViewData["categoryName"];
+    bool isJoinedInATeam = (bool)ViewData["isJoinedInATeam"];
+    bool isJoined = (bool)ViewData["isJoined"];
+    string leaderName = (string)ViewData["leaderName"];
+    bool isLeader = (bool)ViewData["isLeader"];
+    bool isFull = (bool)ViewData["isFull"];
+    bool alreadyRequested = (bool)ViewData["AlreadyRequested"];
+    Dictionary<ApplicationUser, bool> players = (Dictionary<ApplicationUser, bool>)ViewData["players"];
+    List<ApplicationUser> playersRequests = (List<ApplicationUser>)ViewData["PlayersRequests"];
+}
+
+@functions {
+    public string GetAge(DateTime x)
+    {
+        int age = 0;
+        age = DateTime.Now.Subtract(x).Days;
+        age = age / 365;
+        return age.ToString();
+    }
+    public string GetBirthDay(DateTime x)
+    {
+        return x.Day.ToString() + "/" + x.Month.ToString() + "/" + x.Year.ToString();
+    }
+    public string GetWithUs(DateTime x)
+    {
+        return x.Year.ToString();
+    }
+}
+
+<link href="~/css/teamDetails.css" rel="stylesheet" />
+
+
+@{ string categoryNameJPG = categoryName + ".jpg";}
+<div id="teamContainer" style="background-image:url(/img/categories/sports/teamDetails/@categoryNameJPG);background-repeat:no-repeat; background-size: cover;">
+    @if (isLeader)
+    {
+        <div class="teamManage col-md-8" style="margin: 0 auto !important; padding:50px 60px 60px 80px!important;">
+            <h3>Team @Model.Name</h3>
+            <div class="row text-center">
+
+                <div class="col-md-7" id="teamInfo">
+                    <div style="display:flex;justify-content:center; padding-top:50px">
+                        <div>
+                            <dl class="row">
+                                <dt class="col-sm-5">
+                                    Team Leader:
+                                </dt>
+                                <dd class="col-sm-5">
+                                    @leaderName
+                                </dd>
+                                <dt class="col-sm-5">
+                                    City:
+                                </dt>
+                                <dd class="col-sm-5">
+                                    @Model.City
+                                </dd>
+                                <dt class="col-sm-5">
+                                    Sport Category:
+                                </dt>
+                                <dd class="col-sm-5">
+                                    @categoryName
+                                </dd>
+                                <dt class="col-sm-5">
+                                    Your team is:
+                                </dt>
+                                <dd class="col-sm-5">
+                                    @if (Model.isPrivate)
+                                    {
+                                        <p>Private</p>
+                                    }
+                                    else
+                                    {
+                                        <p>Public</p>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:30px; display:flex;">
+                        <button style="color:black;margin-left:50px" class="tag__item btn btn-delete-team" onclick="DeleteFromDetails('/Team/Delete/@Model.Id')">Delete Team</button>
+                        <a style="margin-left:70px" class="tag__item btn btn-edit-team" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="row-md-6" style="text-align: center">
+                        <label>Invite Your Friends : </label>
+                        <div id="inviteDiv">
+                            <input name="username" class="form-control" id="username" autocomplete="off" placeholder="Username" />
+                            <button class="tag__item btn btn-invite-team" onclick="InvitePlayerFromDetails()">Invite</button>
+                        </div>
+                    </div>
+                    <div class="row-md-6">
+                        @if (Model.isPrivate)
+                        {
+                            <div class="col-md-1.5 accessTeam">
+                                <p>Want other players to find you easily?</p>
+                                <button class="tag__item btn" onclick="changeAccess('/Team/changeAccess/@Model.Id','public')">Go Public</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-1.5 accessTeam">
+                                <p>Want other players to ask before joining?</p>
+                                <button class="tag__item btn" onclick="changeAccess('/Team/changeAccess/@Model.Id','private')">Go Private</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+    else if (!isLeader)
+    {
+        <div class="teamManage col-md-6" style="margin: 0 auto !important;">
+            <h3>Team @Model.Name</h3>
+            <div class="row text-center">
+                <div class="" id="teamInfo">
+                    <div style="display:flex;justify-content:center">
+                        <div style="width:100%; margin:40px 70px 0">
+                            <dl class="row">
+                                <dt class="col-sm-5">
+                                    Team Leader Name:
+                                </dt>
+                                <dd class="col-sm-7">
+                                    @leaderName
+                                </dd>
+                                <dt class="col-sm-5">
+                                    City:
+                                </dt>
+                                <dd class="col-sm-7">
+                                    @Model.City
+                                </dd>
+                                <dt class="col-sm-5">
+                                    Sport Category:
+                                </dt>
+                                <dd class="col-sm-7">
+                                    @categoryName
+                                </dd>
+                                <dt class="col-sm-5">
+                                    This team is:
+                                </dt>
+                                <dd class="col-sm-7">
+                                    @if (Model.isPrivate)
+                                    {
+                                        <p>Private</p>
+                                    }
+                                    else
+                                    {
+                                        <p>Public</p>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="leaveJoinButtons">
+                    @if (isJoined)
+                    {
+                        <button class="tag__item btn btn-delete-team" style="margin:0 auto!important;" onclick="Leave('/Team/Leave/@Model.Id')">Leave Team</button>
+                    }
+                    else if (!isJoinedInATeam && !isFull && Model.isPrivate)
+                    {
+                        <button class="nav-link tag__item btn btn-join-team" onclick="AskToJoin('/Team/RequestToJoin/@Model.Id')">Join Team</button>
+                    }
+                    else if (!isJoinedInATeam && !isFull && !Model.isPrivate)
+                    {
+                        <button class="nav-link tag__item btn btn-join-team" onclick="Join('/Team/Join/@Model.Id')">Join Team</button>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    <!--PLAYER CARDS-->
+    <div class="col-md-10 col-sm-10 offset-sm-1 offset-md-1">
+        <div class="row">
+            @foreach (KeyValuePair<ApplicationUser, bool> x in players)
+            {
+                <div class="col-md-4 col-sm-6">
+                    <div class="card-container">
+                        <div class="card">
+                            <div class="front">
+                                <div class="cover">
+                                    <img src="~/img/categories/sports/playerDetails/@categoryNameJPG" />
+                                </div>
+                                <div class="user">
+                                    <img class="img-circle imgPCirle" src="~/ProfileImg/@x.Key.ProfileImg" />
+                                </div>
+                                <div class="content">
+                                    <div class="main">
+                                        <h3 style="color:black!important; font-weight:500!important" class="name">@x.Key.UserName</h3>
+                                        <h5 class="text-center" style="padding-top:30px">Age : @GetAge(x.Key.DateOfBirth)</h5>
+                                    </div>
+                                    <div class="footer">
+                                        <i class="fas fa-reply"></i> Details
+                                    </div>
+                                </div>
+                            </div> <!-- end front panel -->
+                            <div class="back">
+                                <div class="header">
+                                    @if (x.Value)
+                                    {
+                                        <h5 class="mottoTeamLeader">Team Leader</h5>
+                                    }
+                                    else
+                                    {
+                                        <h5 class="motto">Player</h5>
+                                    }
+                                </div>
+                                <div class="content">
+                                    <div class="main">
+                                        <h5 class="text-center" style="padding-top:50px">From: @x.Key.Location</h5>
+                                        <h6 class="text-center" style="padding-top:50px">Date of Birth: @GetBirthDay(x.Key.DateOfBirth)</h6>
+
+                                        <p class="text-center">Part of 'Kick It' since: @GetWithUs(x.Key.RegistrationDate)</p>
+                                        @if (isLeader && (currentUser != x.Key.UserName))
+                                        {
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-xs btn-black"
+                                                        onclick="Remove('/Team/RemoveFromTeam','@x.Key.UserName','@x.Key.ProfileImg','@x.Key.Id','@x.Key.TeamId')" style="color:red!important">
+                                                    Remove Player <i class="fas fa-sign-out-alt"></i>
+                                                </button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div> <!-- end back panel -->
+                        </div> <!-- end card -->
+                    </div> <!-- end card-container -->
+                </div>
+            }
+        </div>
+    </div>
+
+
+    @if (isLeader)
+    {
+
+        if (playersRequests.Count > 0)
+        {
+            <hr style="width: 70%; border: 2px solid grey !important; border-radius: 5px; background-color: grey !important; margin-top: 100px"/>
+            <div id="requestsPlayers">
+                <h3 class="text-center" style="margin-bottom:20px">Players that requested to join your team:</h3>
+                <div class="col-md-10 col-sm-10 offset-sm-1 offset-md-1">
+                    <div class="row">
+                        @foreach (ApplicationUser x in playersRequests)
+                        {
+                            <div class="col-md-4 col-sm-6">
+                                <div class="card-container">
+                                    <div class="card">
+                                        <div class="front">
+                                            <div class="cover">
+                                                <img src="~/img/categories/sports/playerDetails/@categoryNameJPG" />
+                                            </div>
+                                            <div class="user">
+                                                <img class="img-circle imgPCirle" src="~/ProfileImg/@x.ProfileImg" />
+                                            </div>
+                                            <div class="content">
+                                                <div class="main">
+                                                    <h3 style="color:black!important; font-weight:500!important" class="name">@x.UserName</h3>
+                                                    <h5 class="text-center" style="padding-top:30px">Age : @GetAge(x.DateOfBirth)</h5>
+                                                </div>
+                                                <div class="footer">
+                                                    <i class="fas fa-reply"></i> Details
+                                                </div>
+                                            </div>
+                                        </div> <!-- end front panel -->
+                                        <div class="back">
+                                            <div class="header">
+                                                <h5 class="motto">Player</h5>
+                                            </div>
+                                            <div class="content">
+                                                <div class="main">
+                                                    <h5 class="text-center" style="padding-top:50px">From: @x.Location</h5>
+                                                    <h6 class="text-center" style="padding-top:50px">Date of Birth: @GetBirthDay(x.DateOfBirth)</h6>
+                                                    <p class="text-center">Part of 'Kick It' since: @GetWithUs(x.RegistrationDate)</p>
+
+                                                    <div class="text-center" style="padding-top:30px">
+                                                        <button type="button" class="btn btn-xs btn-black"
+                                                                onclick="RefuseR('/Team/RefuseRequest/@Model.Id', '@x.Id')" style="color:red!important;">
+                                                            Refuse Player <i class="far fa-times-circle"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-xs btn-black"
+                                                                onclick="ApproveR('/Team/ApproveRequest/@Model.Id', '@x.Id')" style="color: green !important;">
+                                                            Accept Player <i class="far fa-check-circle"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> <!-- end back panel -->
+                                    </div> <!-- end card -->
+                                </div> <!-- end card-container -->
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@section Scripts{
+    <script src="~/js/teamDetails.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#username").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/Team/UsernameAutoComplete/',
+                        data: { "usernamePrefix": request.term },
+                        type: "POST",
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                console.log(item);
+                                console.log(data);
+                                return item;
+                            }))
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                minLength: 1
+            });
+        });
+    </script>
+
+    
+}

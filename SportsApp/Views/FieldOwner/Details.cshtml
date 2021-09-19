@@ -1,0 +1,29 @@
+@model SportsApp.Models.FieldOwner;
+
+@{
+    ViewData["Title"] = "Details";
+    var applicationName = ViewData["AplicationUserName"];
+}
+
+<section>
+    <div class="container py-4">
+        <article class="postcard dark blue">
+            <div class="postcard__text">
+                <h1 class="postcard__title blue"><a href="#">Details</a></h1>
+                <div class="postcard__subtitle small">
+                </div>
+                <div class="postcard__bar"></div>
+                <div class="postcard__preview-txt">
+                    Bussiness Name: @Html.DisplayFor(model => model.BuissnessName)<br />
+                    Address : @Html.DisplayFor(model => model.Address)<br />
+                    Contact Number : @Html.DisplayFor(model => model.ContactNr)<br />
+                    Application User : @applicationName<br />
+                </div>
+                <ul class="postcard__tagbox">
+                    <li class="tag__item"><i class="fas fa-user-edit"></i><a asp-action="Edit" asp-route-id="@Model.Id">Edit</a></li>
+                    <li class="tag__item"><i class="fas fa-list mr-2"></i><a asp-action="GetFieldOwners">Back to List</a></li>
+                </ul>
+            </div>
+        </article>
+    </div>
+</section>

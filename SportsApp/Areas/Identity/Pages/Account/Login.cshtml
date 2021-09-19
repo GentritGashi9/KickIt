@@ -1,0 +1,69 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+
+
+<div class="login-form text-center">
+    <h1 style="text-align: center;color:#ffc107;">@ViewData["Title"]</h1>
+    <h4 style="color:#ffc107;outline: #fff;">Use a local account to log in.</h4>
+    <hr class="login-form-hr" />
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <form id="account" method="post">
+                <div asp-validation-summary="All" class="text-danger validation" ></div>
+                <div class="form-group">
+                    <label asp-for="Input.UserName" class="login-label"></label>
+                    <i class="fas fa-user-circle register-icons"></i>
+                    <input asp-for="Input.UserName" class="form-control" />
+                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Password" class="login-label"></label>
+                    <i class="fas fa-key register-icons"></i>
+                    <div class="inputWrap">
+                        <input asp-for="Input.Password" class="form-control" id="pwinput" />
+                        <span class="eye" onclick="UnhideP()"><i class="fas fa-eye" id="UnhP"></i><i
+                                class="fas fa-eye-slash" style="display:none;" id="UnhP1"></i></span>
+                    </div>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label asp-for="Input.RememberMe" class="login-label">
+                            <input asp-for="Input.RememberMe" />
+                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary"
+                        style="background-color: #ffc107;border:none;color:black;font-size:25px!important;">Log
+                        in</button>
+                </div>
+                <div class="form-group">
+                    <p class="login-links">
+                        <a id="forgot-password" asp-page="./ForgotPassword" class="login-label ">Forgot your
+                            password?</a>
+                    </p>
+                    <p class="login-links">
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="login-label ">Register as
+                            a new user</a>
+                    </p>
+                    <p class="login-links">
+                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" class="login-label ">Resend
+                            email confirmation</a>
+                    </p>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}

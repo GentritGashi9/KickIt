@@ -1,0 +1,27 @@
+<div class="container" >
+    <div class="text-center tableAdmin" style="margin-bottom:20px;">
+        <div class="text-center yellowsite" style="margin-bottom:20px;">
+            <h4>All Teams List</h4>
+            <a class="btn neonbutton" style="margin-top:20px" asp-controller="Team" asp-action="Create">Create a Team</a>
+        </div>
+        <hr />
+        <div>
+            <table id="DT_loadTeam" class="table table-striped table-bordered" style="width:100%">
+                <thead class="light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Team Leader's Name</th>
+                        <th>City</th>
+                        <th>Sport Category</th>
+                        <th>Details</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/js/teamsList.js"></script>
+}

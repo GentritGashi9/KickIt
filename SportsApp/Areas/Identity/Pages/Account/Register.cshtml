@@ -1,0 +1,105 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="register-form">
+    <h1 style="text-align: center;color:#ffc107;padding-top:50px;">@ViewData["Title"]</h1>
+    <form asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
+        <h4 style="margin-top:20px;display:flex;justify-content:center;align-items:center;color:#ffc107;">Become a Player.</h4>
+        <hr class="register-form-hr"/>
+        @* <div asp-validation-summary="All" class="text-danger text-center"></div> *@
+        <div class="container">
+
+            <div class="row justify-content-center">
+
+                <div class="col-md-6 text-center ">
+
+                    <div class="form-group">
+                        <label asp-for="Input.Email" class="register-label"></label>
+                        <i class="far fa-envelope register-icons"></i>
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Name" class="register-label"></label>
+                        <i class="fas fa-info-circle register-icons"></i>
+                        <input asp-for="Input.Name" class="form-control" />
+                        <span asp-validation-for="Input.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Surname" class="register-label"></label>
+                        <i class="fas fa-info-circle register-icons"></i>
+                        <input asp-for="Input.Surname" class="form-control" />
+                        <span asp-validation-for="Input.Surname" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.User" class="register-label">Username</label>
+                        <i class="fas fa-user-circle register-icons"></i>
+                        <input asp-for="Input.User" class="form-control" />
+                        <span asp-validation-for="Input.User" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <div class="form-group">
+                        <label class="register-label">Enter Your Profile Image:</label>
+                        <i class="fas fa-image register-icons"></i>
+                        <input class="form-control" type="file" asp-for="Input.File" />
+                        <span asp-validation-for="Input.File" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.DateOfBirth" class="register-label">Date of Birth</label>
+                        <input asp-for="Input.DateOfBirth" class="form-control" type="date" min="1960-01-01"
+                            max="2020-12-31" />
+                        <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Password" class="register-label"></label>
+                        <i class="fas fa-key register-icons"></i>
+                        <div class="inputWrap">
+                            <input asp-for="Input.Password" class="form-control" id="pwinput" />
+                            <span class="eye" onclick="UnhideP()"><i class="fas fa-eye" id="UnhP"></i><i
+                                    class="fas fa-eye-slash" style="display:none;" id="UnhP1"></i></span>
+                        </div>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.ConfirmPassword" class="register-label"></label>
+                        <i class="fas fa-key register-icons"></i>
+                        <div class="inputWrap">
+                            <input asp-for="Input.ConfirmPassword" class="form-control" id="cpwinput" />
+                            <span class="eye" onclick="UnhideCP()"><i class="fas fa-eye" id="UnhCP"></i><i
+                                    class="fas fa-eye-slash" style="display:none;" id="UnhCP1"></i></span>
+                        </div>
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="text-center">
+                <label asp-for="Input.Location" class="register-label"></label>
+                <i class="fas fa-map-marker-alt register-icons"></i>
+                <div class="col-md-6 offset-3" style="width:100%">
+                    <select asp-for="Input.Location" class="selectpicker show-tick form-control" data-live-search="true" size='5'
+                        asp-items="@Html.GetEnumSelectList(typeof(SportsApp.Models.Cities))">
+                        <option value="" disabled selected hidden>Please choose your city...</option>
+                    </select>
+                </div>
+                <span asp-validation-for="Input.Location" class="text-danger"></span>
+            </div>
+
+        </div>
+
+        <div class="text-center " style="margin-top:20px;display:flex;justify-content:center;align-items:center;">
+            <button type="submit" class="btn btn-primary" style="margin-bottom: 20px;background-color:#ffc107;font-weight:700;color:black;border:none;">Register</button>
+
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}

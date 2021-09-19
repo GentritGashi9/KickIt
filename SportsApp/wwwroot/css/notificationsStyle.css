@@ -1,0 +1,40 @@
+.notificationButtonAccept {
+    background-color: #13b2b2;
+    color: white;
+    margin-right: 5px;
+    font-size: 12px !important;
+    font-weight: 900;
+    border-radius: 20px !important
+}
+
+.notificationButtonRefuse {
+    background-color: #dc3545;
+    color: white;
+    font-size: 12px !important;
+    font-weight: 900;
+    border-radius: 20px !important
+}
+.notificationButtonUsless {
+    background-color: #dc3545;
+    color: white;
+    padding: 2px 6px !important;
+    border-radius: 50% !important
+}
+.divNotifications {
+    display: flex;
+    flex-direction: row;
+    color: black
+}
+
+.aNotification {
+    color: white;
+    margin: auto; 
+    padding-right:20px;
+    text-decoration: none;
+}
+
+.aNotification:hover{
+    color:white;
+}
+
+

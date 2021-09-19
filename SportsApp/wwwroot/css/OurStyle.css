@@ -1,0 +1,104 @@
+.inputWrap {
+    position: relative;
+    display: block;
+}
+
+#cpwinput {
+    position: relative;
+}
+
+.eye {
+    right: 5px;
+    top: 0px;
+    padding: 10px 10px;
+    position: absolute;
+    color: #aaa;
+}
+
+    .eye i {
+        color: #007bff;
+    }
+/* Image profile styling */
+.miniProfileImgs {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    border: 3px solid #2196F3;
+}
+
+
+
+/* admin buttons */
+.adminButtons {
+    border-radius: 50%!important;
+    height: 28px;
+    width: 28px;
+    position: relative;
+}
+
+.adminButtons i {
+    position: absolute;
+    top: 3px;
+    right: 3.7px;
+}
+
+.adminButtonsR {
+    border-radius: 50% !important;
+    height: 28px;
+    width: 28px;
+    position: relative;
+}
+
+.adminButtonsR i {
+    position: absolute;
+    top: 4.3px;
+    right: 1px;
+}
+/* dropdown navbarsettings */
+.personalDropdown {
+    display: inline-grid;
+    background-color: lightslategrey;
+}
+
+/*notification drop down*/
+.sparkN {
+    right: 0;
+    left: auto;
+}
+
+@media (max-width:992px) {
+    .sparkN {
+        position: absolute !important;
+    }
+}
+
+/*team details */
+.stback {
+    font-weight: 900;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    border: 1px solid black;
+}
+.stbackS {
+    font-weight: 900;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.7);
+    margin: auto;
+    border-radius: 20px;
+    border: 1px solid black;
+}
+.divider {
+    background-color: #999;
+    width: auto;
+}
+.pback {
+    font-weight: 900;
+    font-size: 16px;
+}
+
+/* selectpicker fix*/
+#specificSelect.dropdown-menu.show{
+    top:auto!important;
+    transform:translate3d(0px 0px 0px)!important;
+}

@@ -1,0 +1,71 @@
+﻿@model SportsApp.Models.ContactUs
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container">
+    <div class="row justify-content-center"style="height: 600px;">
+        <div class="col-10">
+            <div class="card card-white post">
+                <div class="post-heading" style="display: flex; justify-content: center!important; text-align:center">
+                    <div class="float-left meta" style="margin-left: 5px;">
+                        <div class="title h5" style="margin-bottom:0;">
+                            <a href="#"><b style="color: black;"> @Html.DisplayFor(model => model.Name) </b></a>
+                        </div>
+                        <h6 class="text-muted time"> @Html.DisplayFor(model => model.Email) </h6>
+                    </div>
+                </div>
+                <div class="post-description" style="padding:50px 100px;">
+                    <p>Title: <b>@Html.DisplayFor(model => model.Title)</b></p>
+                    <p>Message: <i>@Html.DisplayFor(model => model.Message)</i></p>
+                </div>
+                <div class="d-flex justify-content-around">
+                    <button class="btn primary-btn" data-toggle="modal" data-target="#ResponseModal" onclick="emptyValues()">Response <i style="font-size:15px" class="fas fa-reply"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="ResponseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="max-width: 800px;">
+        <form method="post" asp-controller="ContactUs" asp-action="SendEmailAsync">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="margin-top:20px;text-align:center; width:100%">
+                        Respond to this contact:
+                    </h5>
+                    <span id="error" style="color: red;position:absolute;bottom:10px;"></span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div>
+                    <div class="row" style="text-align:center;z-index: 0; display: flex; padding: 5px; flex-direction:column; justify-content:center; align-content:center">
+                        <label for="email">Email:</label>
+                        <input type="email" asp-for="@Model.Email" readonly value="@Model.Email"  required style="width:50%;display: block; padding: 5px; font-size:14px!important;" />
+                        <label for="title">Title:</label>
+                        <input name="title" type="text" asp-for="@Model.Title" value="RE:@Model.Title" required readonly style="width:50%;display: block; padding: 5px; font-size:14px!important;" />
+                        <label for="message">Response:</label>
+                        <textarea id="responseTextarea" asp-for="@Model.Message" rows="3" value="" required name="message" style="display: block; width: 50%; resize: none; padding: 5px; font-size: 14px!important;"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                    <button asp-action="SendResponse" type="submit" class="btn btn-primary" onclick="sendResponse()">Send Response</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function sendResponse() {
+        $('#ResponseModal').modal('hide');
+        toastr.success("Response was sent!");
+    }
+    function emptyValues() {
+        document.getElementById("responseTextarea").value = null;
+    }
+</script>
+
